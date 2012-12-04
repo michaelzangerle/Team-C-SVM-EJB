@@ -1,0 +1,29 @@
+/ServerRemoteLib/build/
+/ClientApplication/build/
+/ServerRemoteLib/dist/
+/ServerApplication/build/
+/ServerApplication/ServerApplication-ejb/build/
+/ServerApplication/ServerApplication-war/build/
+/ServerApplication/ServerApplication-war/dist/
+/ServerApplication/ServerApplication-ejb/dist/
+/ServerApplication/dist/
+/ClientApplication/dist/
+
+
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+private.properties
+private.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+*.war
+*.ear
