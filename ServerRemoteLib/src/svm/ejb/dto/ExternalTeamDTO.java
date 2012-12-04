@@ -15,14 +15,14 @@ import svm.domain.abstraction.modelInterfaces.IModel;
 public class ExternalTeamDTO extends TeamDTO {
 
     private String name;
-    private IContactDetails contactDetails;
+    private ContactDetailsDTO contactDetails;
     private String alias;
 
     public String getName() {
         return name;
     }
 
-    public IContactDetails getContactDetails() {
+    public ContactDetailsDTO getContactDetails() {
         return contactDetails;
     }
 
@@ -39,7 +39,7 @@ public class ExternalTeamDTO extends TeamDTO {
     protected void doUpdate(IModel m) {
         IExternalTeam team = (IExternalTeam)m;
         this.name = team.getName();
-        this.contactDetails = team.getContactDetails();
+        this.contactDetails = new ContactDetailsDTO(team.getContactDetails());
         this.alias = team.getAlias();
     }
 }

@@ -27,3 +27,8 @@ private.xml
 # Package Files #
 *.war
 *.ear
+/ServerApplication/nbproject/private/
+/ServerApplication/ServerApplication-war/nbproject/private/
+/ServerApplication/ServerApplication-ejb/nbproject/private/
+/ServerRemoteLib/nbproject/private/
+/ClientApplication/nbproject/private/
