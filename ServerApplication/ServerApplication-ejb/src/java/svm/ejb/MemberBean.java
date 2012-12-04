@@ -38,12 +38,16 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
-    public void start(IMember member) throws PersistenceException, DomainException, LogicException {
-        super.start();
-        this.member = member;
-        isNewMember = false;
-        reattachObjectToSession(member);
-        memberDTO = new MemberDTO(member);
+    public void start(MemberDTO member) throws PersistenceException, DomainException, LogicException {
+        try {
+            super.start();
+            this.member = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
+            isNewMember = false;
+            reattachObjectToSession(this.member);
+            memberDTO = new MemberDTO(this.member);
+        } catch (NoSessionFoundException ex) {
+            throw new PersistenceException(ex);
+        }
     }
 
     @Override

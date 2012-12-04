@@ -40,20 +40,22 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     private List<IMember> removedMember;
 
     @Override
-    public void start(ITeam team, IContest contest) throws PersistenceException, DomainException, LogicException {
+    public void start(TeamDTO team, ContestDTO contest) throws PersistenceException, DomainException, LogicException {
         super.start();
-        this.team = team;
-        reattachObjectToSession(team);
-        teamDTO = new InternalTeamDTO(team);
 
-        this.contest = contest;
-        reattachObjectToSession(contest);
-        ContestDTO contestDTO = new ContestDTO(contest);
 
 
         try {
-            this.subTeam = DomainFacade.getSubTeamModelDAO().get(getSessionId(), team, contest);
-            reattachObjectToSession(contest);
+            this.team = DomainFacade.getTeamModelDAO().getByUID(getSessionId(), team.getUID());
+            reattachObjectToSession(this.team);
+            teamDTO = new InternalTeamDTO(this.team);
+
+            this.contest = DomainFacade.getContestModelDAO().getByUID(getSessionId(), contest.getUID());
+            reattachObjectToSession(this.contest);
+            ContestDTO contestDTO = new ContestDTO(this.contest);
+
+            this.subTeam = DomainFacade.getSubTeamModelDAO().get(getSessionId(), this.team, this.contest);
+            reattachObjectToSession(this.contest);
 
             try {
                 reattachObjectToSession(this.subTeam.getTeam());
@@ -123,22 +125,24 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
         try {
             check();
 
-       IMember m = null;
-       IMember toSearch = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
-       for (IMember x : subTeam.getTeam().getMembers()) {
-           if (x.equals(toSearch)) m = x;
-       }
+            IMember m = null;
+            IMember toSearch = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
+            for (IMember x : subTeam.getTeam().getMembers()) {
+                if (x.equals(toSearch)) {
+                    m = x;
+                }
+            }
 
-       if (m != null) {
-           this.subTeam.addMember(m);
-           if (!this.addedMember.contains(m)) {
-               this.addedMember.add(m);
-           }
-       } else {
-           System.out.println("NULL addMember [subTeam]");
-       }
-            
-       subTeamDTO.update(subTeam);
+            if (m != null) {
+                this.subTeam.addMember(m);
+                if (!this.addedMember.contains(m)) {
+                    this.addedMember.add(m);
+                }
+            } else {
+                System.out.println("NULL addMember [subTeam]");
+            }
+
+            subTeamDTO.update(subTeam);
         } catch (svm.domain.abstraction.exception.DomainException ex) {
             Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -147,7 +151,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
             Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotSupportedException ex) {
             Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
-        }  catch (NoSessionFoundException ex) {
+        } catch (NoSessionFoundException ex) {
             Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -157,26 +161,27 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
         try {
             check();
 
-       IMember m = null;
-       IMember toSearch = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
+            IMember m = null;
+            IMember toSearch = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
 
-       for (ISubTeamsHasMembers x : subTeam.getSubTeamMembers()) {
-           if (x.getMember().equals(toSearch))
-               m = x.getMember();
-       }
+            for (ISubTeamsHasMembers x : subTeam.getSubTeamMembers()) {
+                if (x.getMember().equals(toSearch)) {
+                    m = x.getMember();
+                }
+            }
 
-       if (m != null) {
-           this.subTeam.removeMember(m);
-           if (!removedMember.contains(m)) {
-               removedMember.add(m);
-           }
-           System.out.println("subteamcontroller remove member finsh");
-       } else {
-           System.out.println("NULL removeMember [subTeam]");
-       }
-            
-            
-       subTeamDTO.update(subTeam);
+            if (m != null) {
+                this.subTeam.removeMember(m);
+                if (!removedMember.contains(m)) {
+                    removedMember.add(m);
+                }
+                System.out.println("subteamcontroller remove member finsh");
+            } else {
+                System.out.println("NULL removeMember [subTeam]");
+            }
+
+
+            subTeamDTO.update(subTeam);
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -184,9 +189,9 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
 
     @Override
     public List<MemberDTO> getMembersOfSubTeam() throws LogicException, PersistenceException {
-             check();
-             
-       List<MemberDTO> members = new LinkedList<MemberDTO>();
+        check();
+
+        List<MemberDTO> members = new LinkedList<MemberDTO>();
         for (ISubTeamsHasMembers member : subTeam.getSubTeamMembers()) {
             members.add(new MemberDTO(member.getMember()));
         }
@@ -197,7 +202,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
 
     @Override
     public List<MemberDTO> getMemberOfTeam() throws LogicException, PersistenceException {
-             List<MemberDTO> members = new LinkedList<MemberDTO>();
+        List<MemberDTO> members = new LinkedList<MemberDTO>();
         for (IMember member : subTeam.getTeam().getMembers()) {
             members.add(new MemberDTO(member));
         }

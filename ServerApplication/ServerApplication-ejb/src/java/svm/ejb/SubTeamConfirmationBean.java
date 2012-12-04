@@ -4,6 +4,8 @@
  */
 package svm.ejb;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.modelInterfaces.IMember;
@@ -49,14 +51,18 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
         }
     }
 
-    public void start(IMember member, ISubTeam subteam) throws PersistenceException, DomainException, LogicException {
-        super.start();
-        this.subteam = subteam;
-        this.member = member;
-        reattachObjectToSession(member);
-        reattachObjectToSession(subteam);
-        this.transferMember = new MemberDTO(member);
-        this.transferSubTeam = new SubTeamDTO(subteam);
+    public void start(MemberDTO member, SubTeamDTO subteam) throws PersistenceException, DomainException, LogicException {
+        try {
+            super.start();
+            this.subteam = DomainFacade.getSubTeamModelDAO().getByUID(getSessionId(), subteam.getUID());
+            this.member = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
+            reattachObjectToSession(this.member);
+            reattachObjectToSession(this.subteam);
+            this.transferMember = new MemberDTO(this.member);
+            this.transferSubTeam = new SubTeamDTO(this.subteam);
+        } catch (NoSessionFoundException ex) {
+            Logger.getLogger(SubTeamConfirmationBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

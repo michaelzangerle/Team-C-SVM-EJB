@@ -4,7 +4,6 @@
  */
 package svm.ejb.dto;
 
-import svm.domain.abstraction.modelInterfaces.IContactDetails;
 import svm.domain.abstraction.modelInterfaces.IExternalTeam;
 import svm.domain.abstraction.modelInterfaces.IModel;
 

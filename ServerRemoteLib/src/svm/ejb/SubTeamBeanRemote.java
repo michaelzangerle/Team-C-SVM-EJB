@@ -6,10 +6,10 @@ package svm.ejb;
 
 import java.util.List;
 import javax.ejb.Remote;
-import svm.domain.abstraction.modelInterfaces.IContest;
-import svm.domain.abstraction.modelInterfaces.ITeam;
+import svm.ejb.dto.ContestDTO;
 import svm.ejb.dto.MemberDTO;
 import svm.ejb.dto.SubTeamDTO;
+import svm.ejb.dto.TeamDTO;
 import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
@@ -33,6 +33,6 @@ public interface SubTeamBeanRemote extends SvmBean{
 
     List<MemberDTO> getMemberOfTeam() throws LogicException,PersistenceException;
     
-    public void start(ITeam team, IContest contest) throws PersistenceException, DomainException, LogicException;
+    public void start(TeamDTO team, ContestDTO contest) throws PersistenceException, DomainException, LogicException;
     
 }

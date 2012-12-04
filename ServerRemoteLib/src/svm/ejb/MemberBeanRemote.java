@@ -119,5 +119,5 @@ public interface MemberBeanRemote extends SvmBean {
 
     void addMemberToTeam(TeamDTO team) throws PersistenceException, DomainException, LogicException;
 
-    void start(svm.domain.abstraction.modelInterfaces.IMember member) throws PersistenceException, DomainException, LogicException;
+    void start(MemberDTO member) throws PersistenceException, DomainException, LogicException;
 }
