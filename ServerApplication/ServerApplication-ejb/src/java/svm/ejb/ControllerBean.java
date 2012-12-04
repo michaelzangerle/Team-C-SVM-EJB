@@ -28,6 +28,16 @@ public abstract class ControllerBean implements SvmBean {
         started = true;
     }
 
+    @Override
+    public void abort() throws LogicException, PersistenceException {
+        started = false;
+    }
+
+    @Override
+    public void commit() throws LogicException, PersistenceException {
+        started = false;
+    }
+
     protected void check() throws LogicException {
         if (!isStarted()) {
             throw new LogicException("Controller not started");

@@ -103,7 +103,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 

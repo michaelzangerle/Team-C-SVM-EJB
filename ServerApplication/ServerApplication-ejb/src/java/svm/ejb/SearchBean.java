@@ -36,7 +36,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         try {
             DomainFacade.closeSession(sessionId);
         } catch (NoSessionFoundException ex) {
@@ -44,6 +44,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             throw new PersistenceException(ex);
         }
         this.sessionId = null;
+        super.abort();
     }
 
     @Override
@@ -55,6 +56,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             throw new PersistenceException(ex);
         }
         this.sessionId = null;
+        super.commit();
     }
 
     @Override

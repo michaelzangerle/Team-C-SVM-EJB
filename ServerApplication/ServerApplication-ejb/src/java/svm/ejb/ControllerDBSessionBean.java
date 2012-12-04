@@ -91,7 +91,8 @@ public abstract class ControllerDBSessionBean<T extends IModelDAO> extends Contr
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
+        super.abort();
         try {
             DomainFacade.closeSession(sessionId);
         } catch (NoSessionFoundException ex) {
@@ -103,6 +104,7 @@ public abstract class ControllerDBSessionBean<T extends IModelDAO> extends Contr
 
     @Override
     public void commit() throws LogicException, PersistenceException {
+        super.commit();
         try {
             DomainFacade.closeSession(sessionId);
         } catch (NoSessionFoundException ex) {

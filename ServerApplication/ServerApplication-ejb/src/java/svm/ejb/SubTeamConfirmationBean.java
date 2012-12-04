@@ -67,7 +67,7 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 

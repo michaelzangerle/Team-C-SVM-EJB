@@ -52,7 +52,7 @@ public class TeamBean extends ControllerDBSessionBean<ITeamModelDAO> implements 
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         super.abort();
 
     }

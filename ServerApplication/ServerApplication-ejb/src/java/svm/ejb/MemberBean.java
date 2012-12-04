@@ -89,7 +89,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 
@@ -292,7 +292,6 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
             throw new DomainException(ex);
         }
         memberDTO.update(member);
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

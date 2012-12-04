@@ -88,7 +88,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
-    public void abort() throws PersistenceException {
+    public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 

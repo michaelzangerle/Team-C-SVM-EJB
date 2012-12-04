@@ -68,7 +68,7 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
-    public void abort() throws svm.ejb.exceptions.PersistenceException {
+    public void abort() throws svm.ejb.exceptions.PersistenceException, LogicException {
         super.abort();
     }
 
