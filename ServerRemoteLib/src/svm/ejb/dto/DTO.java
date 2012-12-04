@@ -4,13 +4,14 @@
  */
 package svm.ejb.dto;
 
+import java.io.Serializable;
 import svm.domain.abstraction.modelInterfaces.IModel;
 
 /**
  *
  * @author Administrator
  */
-public abstract class DTO<T extends IModel> {
+public abstract class DTO<T extends IModel> implements Serializable {
 
     private int uid;
 

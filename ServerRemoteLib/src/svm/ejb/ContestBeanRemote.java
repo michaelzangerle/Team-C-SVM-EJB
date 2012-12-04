@@ -22,9 +22,9 @@ import svm.ejb.exceptions.PersistenceException;
  * @author mike
  */
 @Remote
-public interface ContenstBeanRemote extends SvmBean{
+public interface ContestBeanRemote extends SvmBean{
     
-     public void start(IContest contest) throws PersistenceException, DomainException, LogicException;
+     public void start(ContestDTO contest) throws PersistenceException, DomainException, LogicException;
 
       void setContestName(String name) throws DomainException,LogicException;
       

@@ -14,8 +14,7 @@ import svm.domain.abstraction.modelInterfaces.IDepartment;
 public class DepartmentDTO extends DTO<IDepartment> {
 
     private String name;
-    private MemberDTO departmentHead;
-    private IContactDetails contactDetails;
+    private ContactDetailsDTO contactDetails;
     private String description;
     private String alias;
 
@@ -23,11 +22,7 @@ public class DepartmentDTO extends DTO<IDepartment> {
         return name;
     }
 
-    public MemberDTO getDepartmentHead() {
-        return departmentHead;
-    }
-
-    public IContactDetails getContactDetails() {
+    public ContactDetailsDTO getContactDetails() {
         return contactDetails;
     }
 
@@ -47,8 +42,7 @@ public class DepartmentDTO extends DTO<IDepartment> {
     @Override
     protected void doUpdate(IDepartment department) {
         this.name = department.getName();
-        this.departmentHead = new MemberDTO(department.getDepartmentHead());
-        this.contactDetails = department.getContactDetails();
+        this.contactDetails = new ContactDetailsDTO(department.getContactDetails());
         this.description = department.getDescription();
         this.alias = department.getAlias();
     }

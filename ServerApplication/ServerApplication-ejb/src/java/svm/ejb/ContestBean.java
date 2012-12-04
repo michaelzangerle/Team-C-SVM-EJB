@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.exception.DomainAttributeException;
@@ -28,7 +29,7 @@ import svm.persistence.abstraction.exceptions.NotSupportedException;
  * @author mike
  */
 @Stateful
-public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> implements ContenstBeanRemote {
+public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> implements ContestBeanRemote {
 
     private IContest contest;
     private ContestDTO contestDTO;
@@ -58,12 +59,18 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
-    public void start(IContest contest) throws PersistenceException, DomainException, LogicException {
+    @PermitAll
+    public void start(ContestDTO contest) throws PersistenceException, DomainException, LogicException {
         super.start();
-        this.contest = contest;
-        isNewContest = false;
-        reattachObjectToSession(contest);
-        this.contestDTO = new ContestDTO(contest);
+        try {
+            this.contest = getModelDAO().getByUID(getSessionId(), contest.getUID());
+            isNewContest = false;
+            reattachObjectToSession(this.contest);
+            this.contestDTO = new ContestDTO(this.contest);
+        } catch (NoSessionFoundException ex) {
+            Logger.getLogger(ContestBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenceException(ex);
+        }
     }
 
     @Override
@@ -450,7 +457,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
             }
 
         } catch (NoSessionFoundException ex) {
-            throw new PersistenceException(ex.getMessage(),ex);
+            throw new PersistenceException(ex.getMessage(), ex);
         }
         return result;
     }
