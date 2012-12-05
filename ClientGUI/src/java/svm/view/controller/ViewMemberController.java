@@ -9,26 +9,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
-import svm.domain.abstraction.exception.DomainAttributeException;
-import svm.domain.abstraction.exception.DomainParameterCheckException;
-import svm.logic.abstraction.exception.IllegalGetInstanceException;
-import svm.logic.abstraction.exception.NotAllowException;
-import svm.logic.abstraction.transferobjects.ITransferDepartment;
-import svm.logic.abstraction.transferobjects.ITransferLocation;
-import svm.logic.abstraction.transferobjects.ITransferMember;
-import svm.logic.abstraction.transferobjects.ITransferSport;
-import svm.logic.abstraction.transferobjects.ITransferUserPrivilege;
-import svm.persistence.abstraction.exceptions.ExistingTransactionException;
-import svm.persistence.abstraction.exceptions.NoSessionFoundException;
-import svm.persistence.abstraction.exceptions.NoTransactionException;
-import svm.persistence.abstraction.exceptions.NotSupportedException;
-import svm.rmi.abstraction.controller.IRMIMemberController;
-import svm.rmi.abstraction.controller.IRMISearchController;
-import svm.rmi.abstraction.factory.IRMIControllerFactory;
+import svm.ejb.MemberBeanRemote;
+import svm.ejb.SearchBeanRemote;
+import svm.ejb.dto.DepartmentDTO;
+import svm.ejb.dto.MemberDTO;
+import svm.ejb.dto.SportDTO;
+import svm.ejb.dto.UserPrivilegeDTO;
+import svm.ejb.exceptions.DomainException;
+import svm.ejb.exceptions.LogicException;
+import svm.ejb.exceptions.PersistenceException;
 import svm.view.forms.PanelMembers;
 
 /**
@@ -37,105 +31,83 @@ import svm.view.forms.PanelMembers;
  */
 public class ViewMemberController {
 
-    private boolean isCmbSportInitialized = false;
-    private IRMIControllerFactory factory = ApplicationController.factory;
-    private IRMIMemberController memberController;
-    private IRMISearchController searchController;
+    @EJB
+    private MemberBeanRemote memberController;
+    @EJB
+    private SearchBeanRemote searchController;
     private PanelMembers panelMembers;
     private DefaultListModel listboxActiveRoles = new DefaultListModel();
     private DefaultListModel listboxAllRoles = new DefaultListModel();
-    private DefaultListModel<ITransferMember> listboxShowMembers = new DefaultListModel();
-    private DefaultComboBoxModel<ITransferSport> cmbSport = new DefaultComboBoxModel();
+    private DefaultListModel<MemberDTO> listboxShowMembers = new DefaultListModel();
+    private DefaultComboBoxModel<SportDTO> cmbSport = new DefaultComboBoxModel();
+    private boolean isCmbSportInitialized = false;
 
     public ViewMemberController(PanelMembers panelMembers) {
-        try {
             this.panelMembers = panelMembers;
-            this.searchController = factory.getRMISearchController(ApplicationController.user);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void searchMembers() {
         try {
-
-            ITransferDepartment chosenDepartment = (ITransferDepartment) panelMembers.getCmbSearchDepartment().getSelectedItem();
+            DepartmentDTO chosenDepartment = (DepartmentDTO) panelMembers.getCmbSearchDepartment().getSelectedItem();
             this.searchController.start();
 
-            List<ITransferMember> members = this.searchController.getMembers(
+            List<MemberDTO> members = this.searchController.getMembers(
                     panelMembers.getTfSearchFirstName().getText(),
                     panelMembers.getTfSearchLastName().getText());//,chosenDepartment,panelMembers.getCbxSearchFee().isSelected());
-            listboxShowMembers = new DefaultListModel<>();
-            for (ITransferMember m : members) {
+            listboxShowMembers = new DefaultListModel();
+            for (MemberDTO m : members) {
                 listboxShowMembers.addElement(m);
             }
             panelMembers.getListboxShowMembers().setModel(listboxShowMembers);
 
             this.searchController.commit();
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
-        } catch (InstantiationException ex) {
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExistingTransactionException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoTransactionException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalGetInstanceException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public void showMembers() {
         try {
-            ITransferMember member = (ITransferMember) panelMembers.getListboxShowMembers().getSelectedValue();
+            MemberDTO member = (MemberDTO) panelMembers.getListboxShowMembers().getSelectedValue();
             if (member == null) {
                 return;
             }
-            try {
                 if (this.memberController != null) {
-                    this.memberController.abort();
-                }
-            } catch (ExistingTransactionException | NoSessionFoundException | NoTransactionException | RemoteException ex) {
-            }
             try {
-                this.memberController = this.factory.getRMIMemberController(member, ApplicationController.user);
-                this.memberController.start();
-                ITransferMember tmp = this.memberController.getMember();
+                this.memberController.abort();
+            } catch (LogicException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenceException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                }
+                this.memberController.start(member);
+                MemberDTO tmp = this.memberController.getMember();
                 // panelMembers.getTfFirstName().setText(tmp.getFirstName());
                 // panelMembers.getTfLastName().setText(tmp.getLastName());
 
                 showMemberDetails(tmp);
 
-            } catch (InstantiationException | IllegalAccessException | NotSupportedException | NoSessionFoundException ex) {
-                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalGetInstanceException ex) {
-                Logger.getLogger(PanelMembers.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(PanelMembers.class.getName()).log(Level.SEVERE, null, ex);
-            }
             listboxActiveRoles = new DefaultListModel();
             listboxAllRoles = new DefaultListModel();
             panelMembers.getListboxActiveRoles().setModel(listboxActiveRoles);
             panelMembers.getListboxAllRoles().setModel(listboxAllRoles);
 
-            for (ITransferUserPrivilege privilege : memberController.getPrivileges()) {
+            for (UserPrivilegeDTO privilege : memberController.getPrivileges()) {
                 listboxActiveRoles.addElement(privilege);
             }
 
             searchController.start();
-            for (ITransferUserPrivilege privilege : searchController.getUserPrivileges()) {
+            for (UserPrivilegeDTO privilege : searchController.getUserPrivileges()) {
                 int i = 0;
                 boolean contains = false;
                 while ((i < listboxActiveRoles.getSize()) && contains == false) {
-                    ITransferUserPrivilege privFromActiveRoles = (ITransferUserPrivilege) listboxActiveRoles.getElementAt(i);
+                    UserPrivilegeDTO privFromActiveRoles = (UserPrivilegeDTO) listboxActiveRoles.getElementAt(i);
                     if (privilege.getName().equals(privFromActiveRoles.getName())) {
                         contains = true;
                     }
@@ -146,37 +118,27 @@ public class ViewMemberController {
                 }
             }
             searchController.commit();
-        } catch (ExistingTransactionException ex) {
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoTransactionException ex) {
+        } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
-        } catch (IllegalGetInstanceException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+        } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
+        }
 
     public void saveMember() {
         try {
-            IRMISearchController search = this.factory.getRMISearchController(ApplicationController.user);
-            search.start();
-            List<ITransferSport> sport = search.getSports();
-            search.commit();
-            for (ITransferSport sp : sport) {
+            searchController.start();
+            List<SportDTO> sport = searchController.getSports();
+            searchController.commit();
+            for (SportDTO sp : sport) {
                 if (sp.equals(this.panelMembers.getCmbSport().getSelectedItem())) {
-                    this.memberController.setSport(sp);
+                    try {
+                        this.memberController.setSport(sp);
+                    } catch (PersistenceException ex) {
+                        Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
             this.memberController.setFirstName(panelMembers.getTfFirstName().getText());
@@ -190,91 +152,57 @@ public class ViewMemberController {
             this.memberController.setEmail2(panelMembers.getTfMail2().getText());
             this.memberController.setPhone1(panelMembers.getTfPhone1().getText());
             this.memberController.setPhone2(panelMembers.getTfPhone2().getText());
-            this.memberController.setSport((ITransferSport)this.panelMembers.getCmbSport().getSelectedItem());
+            this.memberController.setSport((SportDTO)this.panelMembers.getCmbSport().getSelectedItem());
             if (panelMembers.getCheckMemberFee().isEnabled() && panelMembers.getCheckMemberFee().isSelected()) {
-                try {
-                    this.memberController.setPaidCurrentYear();
-                } catch (NoSessionFoundException ex) {
-                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NotSupportedException ex) {
-                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
             this.memberController.setStreet(panelMembers.getTfStreet().getText());
             this.memberController.setStreetNumber(panelMembers.getTfStreetNumber().getText());
             this.memberController.setUsername(panelMembers.getTfUserName().getText());
             this.memberController.commit();
-        } catch (InstantiationException ex) {
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
+        } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalGetInstanceException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExistingTransactionException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoTransactionException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DomainParameterCheckException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DomainAttributeException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Bitte (*) Pflichtfelder ausfüllen.");
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
         }
-        
     }
 
     public void createNewMember() {
         try {
-
             clearMemberFields();
 
             if (this.memberController != null) {
+            try {
                 this.memberController.abort();
+            } catch (LogicException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenceException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (ExistingTransactionException | NoSessionFoundException | NoTransactionException | RemoteException ex) {
-        }
+            }
 
-        try {
-            this.memberController = this.factory.getRMIMemberController(ApplicationController.user);
             this.memberController.start();
-            ITransferMember tmp = this.memberController.getMember();
-        } catch (NoSessionFoundException ex) {
+            MemberDTO tmp = this.memberController.getMember();
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalGetInstanceException ex) {
+        } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
+        } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void showDepartments() {
         try {
-
-            DefaultComboBoxModel<ITransferDepartment> model = new DefaultComboBoxModel<>();
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
             this.searchController.start();
-            for (ITransferDepartment department : searchController.getDepartments()) {
+            for (DepartmentDTO department : searchController.getDepartments()) {
                 model.addElement(department);
             }
             if (isCmbSportInitialized == false) {
-                List<ITransferSport> sports = searchController.getSports();
-                for (ITransferSport sp : sports) {
+                List<SportDTO> sports = searchController.getSports();
+                for (SportDTO sp : sports) {
                     this.cmbSport.addElement(sp);
                 }
                 this.panelMembers.getCmbSport().setModel(cmbSport);
@@ -282,28 +210,16 @@ public class ViewMemberController {
             }
             panelMembers.getCmbSearchDepartment().setModel(model);
             this.searchController.commit();
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
-        } catch (NoSessionFoundException ex) {
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalGetInstanceException ex) {
+        } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-
+        } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void showMemberDetails(ITransferMember tmp) {
-        try {
+    private void showMemberDetails(MemberDTO tmp) {
             panelMembers.getTfFirstName().setText(tmp.getFirstName());
             panelMembers.getTfLastName().setText(tmp.getLastName());
             if (tmp.getGender().equalsIgnoreCase("m")) {
@@ -325,9 +241,6 @@ public class ViewMemberController {
                 panelMembers.getCheckMemberFee().setEnabled(false);
             }
             this.cmbSport.setSelectedItem(tmp.getSport());
-        } catch (DomainParameterCheckException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void clearMemberFields() {
@@ -347,67 +260,55 @@ public class ViewMemberController {
     }
 
     public void addPrivilege() {
-        try {
-            ITransferUserPrivilege privilege = (ITransferUserPrivilege) this.panelMembers.getListboxAllRoles().getSelectedValue();
+            UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxAllRoles().getSelectedValue();
 
             if (privilege != null) {
-
+            try {
                 memberController.addPrivilege(privilege);
                 listboxActiveRoles.addElement(privilege);
 
                 int i = 0;
                 while (i < listboxAllRoles.getSize()) {
-                    ITransferUserPrivilege privFromAllRoles = (ITransferUserPrivilege) listboxAllRoles.getElementAt(i);
+                    UserPrivilegeDTO privFromAllRoles = (UserPrivilegeDTO) listboxAllRoles.getElementAt(i);
                     if (privFromAllRoles.getName().equalsIgnoreCase(privilege.getName())) {
                         listboxAllRoles.remove(i);
                     }
                     i++;
                 }
+            } catch (LogicException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenceException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DomainException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
-        } catch (DomainParameterCheckException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DomainAttributeException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
     }
 
     public void removePrivilege() {
-        try {
-            ITransferUserPrivilege privilege = (ITransferUserPrivilege) this.panelMembers.getListboxActiveRoles().getSelectedValue();
+            UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxActiveRoles().getSelectedValue();
 
             if (privilege != null) {
-
+            try {
                 this.listboxAllRoles.addElement(privilege);
                 memberController.removePrivilege(privilege);
 
                 int i = 0;
                 while (i < listboxActiveRoles.getSize()) {
-                    ITransferUserPrivilege privFromAllRoles = (ITransferUserPrivilege) listboxActiveRoles.getElementAt(i);
+                    UserPrivilegeDTO privFromAllRoles = (UserPrivilegeDTO) listboxActiveRoles.getElementAt(i);
                     if (privFromAllRoles.getName().equalsIgnoreCase(privilege.getName())) {
                         listboxActiveRoles.remove(i);
                     }
                     i++;
                 }
+            } catch (LogicException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenceException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DomainException ex) {
+                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (NotAllowException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this.panelMembers, "Sie haben nicht die erforderlichen Rechte.");
-        } catch (DomainParameterCheckException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DomainAttributeException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
     }
 
     public void clearMemberList() {
