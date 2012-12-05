@@ -6,7 +6,6 @@ package svm.ejb;
 
 import java.io.Serializable;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
@@ -15,9 +14,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import sun.org.mozilla.javascript.internal.ObjArray;
 import svm.messages.MemberMessage;
-import svm.messages.SubTeamMessage;
 
 /**
  *
