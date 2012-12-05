@@ -20,6 +20,7 @@ import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
 import svm.messages.MemberMessage;
+import svm.messages.SubTeamMessage;
 import svm.view.forms.PanelMessages;
 
 /**
@@ -44,7 +45,7 @@ public class ViewMessagesController {
     private DefaultListModel<String> listboxLog = new DefaultListModel();
     private DefaultListModel<MemberDTO> listboxMembersOfSelectedTeam = new DefaultListModel();
     private DefaultListModel<TeamDTO> listboxAllTeamsInSport = new DefaultListModel<TeamDTO>();
-    private DefaultListModel<SubTeamDTO> listboxAssignedContests = new DefaultListModel<SubTeamDTO>();
+    private DefaultListModel<SubTeamMessage> listboxAssignedContests = new DefaultListModel<SubTeamMessage>();
     private SubTeamDTO subteam;
 
     public ViewMessagesController(PanelMessages panelMessages) {
@@ -55,7 +56,7 @@ public class ViewMessagesController {
 
     public void acceptSelectedContests() {
         try {
-            SubTeamDTO msg = (SubTeamDTO) this.panelMessages.getListboxAssignedContests().getSelectedValue();
+            SubTeamMessage msg = (SubTeamMessage) this.panelMessages.getListboxAssignedContests().getSelectedValue();
             searchController.start();
             MemberDTO member = searchController.getMemberByUID(msg.getMember());
             SubTeamDTO subTeam = searchController.getSubTeam(msg.getSubTeam());
@@ -86,7 +87,7 @@ public class ViewMessagesController {
 
     public void denySelectedContests() {
         try {
-            SubTeamDTO msg = (SubTeamDTO) this.panelMessages.getListboxAssignedContests().getSelectedValue();
+            SubTeamMessage msg = (SubTeamMessage) this.panelMessages.getListboxAssignedContests().getSelectedValue();
             searchController.start();
             MemberDTO member = searchController.getMemberByUID(msg.getMember());
             SubTeamDTO subTeam = searchController.getSubTeam(msg.getSubTeam());
@@ -169,7 +170,7 @@ public class ViewMessagesController {
 
     }
 
-    public void addSubTeamMsg(SubTeamDTO tm) {
+    public void addSubTeamMsg(SubTeamMessage tm) {
         try {
             searchController.start();
             MemberDTO member = searchController.getMemberByUID(tm.getMember());
