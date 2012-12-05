@@ -92,25 +92,29 @@ public abstract class ControllerDBSessionBean<T extends IModelDAO> extends Contr
 
     @Override
     public void abort() throws PersistenceException, LogicException {
-        super.abort();
-        try {
-            DomainFacade.closeSession(sessionId);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenceException(ex);
+        if (isStarted()) {
+            super.abort();
+            try {
+                DomainFacade.closeSession(sessionId);
+            } catch (NoSessionFoundException ex) {
+                Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                throw new PersistenceException(ex);
+            }
+            this.sessionId = null;
         }
-        this.sessionId = null;
     }
 
     @Override
     public void commit() throws LogicException, PersistenceException {
-        super.commit();
-        try {
-            DomainFacade.closeSession(sessionId);
-        } catch (NoSessionFoundException ex) {
-            Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenceException(ex);
+        if (isStarted()) {
+            super.commit();
+            try {
+                DomainFacade.closeSession(sessionId);
+            } catch (NoSessionFoundException ex) {
+                Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+                throw new PersistenceException(ex);
+            }
+            this.sessionId = null;
         }
-        this.sessionId = null;
     }
 }

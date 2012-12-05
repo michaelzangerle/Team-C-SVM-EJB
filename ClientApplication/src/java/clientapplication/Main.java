@@ -12,6 +12,7 @@ import svm.ejb.MemberBeanRemote;
 import svm.ejb.SearchBeanRemote;
 import svm.ejb.dto.ContestDTO;
 import svm.ejb.dto.MatchDTO;
+import svm.ejb.dto.MemberDTO;
 import svm.ejb.dto.SportDTO;
 import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
@@ -34,9 +35,11 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws LogicException, PersistenceException, DomainException {
-        memberBean();
-
-        contest();
+        searchBean.start();
+        for (MemberDTO m : searchBean.getMembers("Johannes", "")) {
+            System.out.println(m.getUserName());
+        }
+        searchBean.commit();
     }
 
     private static void contest() throws PersistenceException, DomainException, LogicException {

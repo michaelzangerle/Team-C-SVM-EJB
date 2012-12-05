@@ -21,21 +21,21 @@ import svm.view.forms.*;
 public class ApplicationController {
 
     @EJB
-    private static TeamBeanRemote teamBean;
+    public static TeamBeanRemote teamBean;
     @EJB
-    private static SubTeamConfirmationBeanRemote subTeamConfirmationBean;
+    public static SubTeamConfirmationBeanRemote subTeamConfirmationBean;
     @EJB
-    private static SubTeamBeanRemote subTeamBean;
+    public static SubTeamBeanRemote subTeamBean;
     @EJB
-    private static SearchBeanRemote searchBean;
+    public static SearchBeanRemote searchBean;
     @EJB
-    private static MemberBeanRemote memberBean;
+    public static MemberBeanRemote memberBean;
     @EJB
-    private static ContestConfirmationBeanRemote contestConfirmationBean;
+    public static ContestConfirmationBeanRemote contestConfirmationBean;
     @EJB
-    private static ContestBeanRemote contestBean;
+    public static ContestBeanRemote contestBean;
     @EJB
-    private static SvmSessionBeanRemote sessionBean;
+    public static SvmSessionBeanRemote sessionBean;
     /**
      * The two main forms login and main applicationwindow
      *

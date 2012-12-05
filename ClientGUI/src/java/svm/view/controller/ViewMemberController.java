@@ -31,10 +31,8 @@ import svm.view.forms.PanelMembers;
  */
 public class ViewMemberController {
 
-    @EJB
-    private MemberBeanRemote memberController;
-    @EJB
-    private SearchBeanRemote searchController;
+    private MemberBeanRemote memberController = ApplicationController.memberBean;
+    private SearchBeanRemote searchController = ApplicationController.searchBean;
     private PanelMembers panelMembers;
     private DefaultListModel listboxActiveRoles = new DefaultListModel();
     private DefaultListModel listboxAllRoles = new DefaultListModel();
@@ -43,12 +41,11 @@ public class ViewMemberController {
     private boolean isCmbSportInitialized = false;
 
     public ViewMemberController(PanelMembers panelMembers) {
-            this.panelMembers = panelMembers;
+        this.panelMembers = panelMembers;
     }
 
     public void searchMembers() {
         try {
-            DepartmentDTO chosenDepartment = (DepartmentDTO) panelMembers.getCmbSearchDepartment().getSelectedItem();
             this.searchController.start();
 
             List<MemberDTO> members = this.searchController.getMembers(
@@ -77,21 +74,21 @@ public class ViewMemberController {
             if (member == null) {
                 return;
             }
-                if (this.memberController != null) {
-            try {
-                this.memberController.abort();
-            } catch (LogicException ex) {
-                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PersistenceException ex) {
-                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            if (this.memberController != null) {
+                try {
+                    this.memberController.abort();
+                } catch (LogicException ex) {
+                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (PersistenceException ex) {
+                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                this.memberController.start(member);
-                MemberDTO tmp = this.memberController.getMember();
-                // panelMembers.getTfFirstName().setText(tmp.getFirstName());
-                // panelMembers.getTfLastName().setText(tmp.getLastName());
+            }
+            this.memberController.start(member);
+            MemberDTO tmp = this.memberController.getMember();
+            // panelMembers.getTfFirstName().setText(tmp.getFirstName());
+            // panelMembers.getTfLastName().setText(tmp.getLastName());
 
-                showMemberDetails(tmp);
+            showMemberDetails(tmp);
 
             listboxActiveRoles = new DefaultListModel();
             listboxAllRoles = new DefaultListModel();
@@ -125,7 +122,7 @@ public class ViewMemberController {
         } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
+    }
 
     public void saveMember() {
         try {
@@ -152,7 +149,7 @@ public class ViewMemberController {
             this.memberController.setEmail2(panelMembers.getTfMail2().getText());
             this.memberController.setPhone1(panelMembers.getTfPhone1().getText());
             this.memberController.setPhone2(panelMembers.getTfPhone2().getText());
-            this.memberController.setSport((SportDTO)this.panelMembers.getCmbSport().getSelectedItem());
+            this.memberController.setSport((SportDTO) this.panelMembers.getCmbSport().getSelectedItem());
             if (panelMembers.getCheckMemberFee().isEnabled() && panelMembers.getCheckMemberFee().isSelected()) {
             }
             this.memberController.setStreet(panelMembers.getTfStreet().getText());
@@ -173,13 +170,13 @@ public class ViewMemberController {
             clearMemberFields();
 
             if (this.memberController != null) {
-            try {
-                this.memberController.abort();
-            } catch (LogicException ex) {
-                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PersistenceException ex) {
-                Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    this.memberController.abort();
+                } catch (LogicException ex) {
+                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (PersistenceException ex) {
+                    Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             this.memberController.start();
@@ -220,27 +217,27 @@ public class ViewMemberController {
     }
 
     private void showMemberDetails(MemberDTO tmp) {
-            panelMembers.getTfFirstName().setText(tmp.getFirstName());
-            panelMembers.getTfLastName().setText(tmp.getLastName());
-            if (tmp.getGender().equalsIgnoreCase("m")) {
-                panelMembers.getCmbGender().setSelectedIndex(0);
-            } else {
-                panelMembers.getCmbGender().setSelectedIndex(1);
-            }
-            panelMembers.getTfUserName().setText(tmp.getUserName());
-            panelMembers.getTfMail1().setText(tmp.getEmail1());
-            panelMembers.getTfMail2().setText(tmp.getEmail2());
-            panelMembers.getTfPhone1().setText(tmp.getPhone1());
-            panelMembers.getTfSocialNumber().setText(tmp.getSocialNumber());
-            panelMembers.getTfStreet().setText(tmp.getStreet());
-            panelMembers.getTfStreetNumber().setText(tmp.getStreetNumber());
-            panelMembers.getDcBirthDate().setDate(tmp.getBirthDate());
-            panelMembers.getDcEntryDate().setDate(tmp.getEntryDate());
-            panelMembers.getCheckMemberFee().setSelected(tmp.isHasPaidFee());
-            if (tmp.isHasPaidFee()) {
-                panelMembers.getCheckMemberFee().setEnabled(false);
-            }
-            this.cmbSport.setSelectedItem(tmp.getSport());
+        panelMembers.getTfFirstName().setText(tmp.getFirstName());
+        panelMembers.getTfLastName().setText(tmp.getLastName());
+        if (tmp.getGender().equalsIgnoreCase("m")) {
+            panelMembers.getCmbGender().setSelectedIndex(0);
+        } else {
+            panelMembers.getCmbGender().setSelectedIndex(1);
+        }
+        panelMembers.getTfUserName().setText(tmp.getUserName());
+        panelMembers.getTfMail1().setText(tmp.getEmail1());
+        panelMembers.getTfMail2().setText(tmp.getEmail2());
+        panelMembers.getTfPhone1().setText(tmp.getPhone1());
+        panelMembers.getTfSocialNumber().setText(tmp.getSocialNumber());
+        panelMembers.getTfStreet().setText(tmp.getStreet());
+        panelMembers.getTfStreetNumber().setText(tmp.getStreetNumber());
+        panelMembers.getDcBirthDate().setDate(tmp.getBirthDate());
+        panelMembers.getDcEntryDate().setDate(tmp.getEntryDate());
+        panelMembers.getCheckMemberFee().setSelected(tmp.isHasPaidFee());
+        if (tmp.isHasPaidFee()) {
+            panelMembers.getCheckMemberFee().setEnabled(false);
+        }
+        this.cmbSport.setSelectedItem(tmp.getSport());
     }
 
     private void clearMemberFields() {
@@ -260,9 +257,9 @@ public class ViewMemberController {
     }
 
     public void addPrivilege() {
-            UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxAllRoles().getSelectedValue();
+        UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxAllRoles().getSelectedValue();
 
-            if (privilege != null) {
+        if (privilege != null) {
             try {
                 memberController.addPrivilege(privilege);
                 listboxActiveRoles.addElement(privilege);
@@ -282,13 +279,13 @@ public class ViewMemberController {
             } catch (DomainException ex) {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
+        }
     }
 
     public void removePrivilege() {
-            UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxActiveRoles().getSelectedValue();
+        UserPrivilegeDTO privilege = (UserPrivilegeDTO) this.panelMembers.getListboxActiveRoles().getSelectedValue();
 
-            if (privilege != null) {
+        if (privilege != null) {
             try {
                 this.listboxAllRoles.addElement(privilege);
                 memberController.removePrivilege(privilege);
@@ -308,13 +305,13 @@ public class ViewMemberController {
             } catch (DomainException ex) {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
+        }
     }
 
     public void clearMemberList() {
         listboxShowMembers.clear();
     }
-    
+
     public void selectFirstMember() {
         panelMembers.getListboxShowMembers().setSelectedIndex(0);
     }

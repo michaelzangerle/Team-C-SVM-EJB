@@ -35,12 +35,9 @@ import svm.view.forms.PanelMembers;
  */
 public class ViewContestController {
 
-    @EJB
-    private SearchBeanRemote searchController;
-    @EJB
-    private ContestBeanRemote contestController;
-    @EJB
-    private SubTeamBeanRemote subTeamController;
+    private SearchBeanRemote searchController = ApplicationController.searchBean;
+    private ContestBeanRemote contestController = ApplicationController.contestBean;
+    private SubTeamBeanRemote subTeamController = ApplicationController.subTeamBean;
     private PanelContests panelContests;
     private DefaultListModel<TeamDTO> contestTeams = new DefaultListModel<TeamDTO>();
     private DefaultListModel<ContestDTO> showContests = new DefaultListModel<ContestDTO>();

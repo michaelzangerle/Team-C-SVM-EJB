@@ -29,15 +29,10 @@ import svm.view.forms.PanelMessages;
  */
 public class ViewMessagesController {
 
-    @EJB
-    private ContestBeanRemote contestController;
-    @EJB
-    private SearchBeanRemote searchController;
-    @EJB
-    private SubTeamConfirmationBeanRemote subTeamConfirmationController;
-    
-    @EJB
-    private MemberBeanRemote memberController;
+    private ContestBeanRemote contestController = ApplicationController.contestBean;
+    private SearchBeanRemote searchController = ApplicationController.searchBean;
+    private SubTeamConfirmationBeanRemote subTeamConfirmationController = ApplicationController.subTeamConfirmationBean;
+    private MemberBeanRemote memberController = ApplicationController.memberBean;
     private PanelMessages panelMessages;
     private DefaultListModel listboxActiveRoles = new DefaultListModel();
     private DefaultComboBoxModel<TeamDTO> cmbSelectTeam = new DefaultComboBoxModel();
@@ -92,7 +87,7 @@ public class ViewMessagesController {
             MemberDTO member = searchController.getMemberByUID(msg.getMember());
             SubTeamDTO subTeam = searchController.getSubTeam(msg.getSubTeam());
             searchController.commit();
-            subTeamConfirmationController.start(member,subTeam);
+            subTeamConfirmationController.start(member, subTeam);
             subTeamConfirmationController.setConfirmation(false, "");
             subTeamConfirmationController.commit();
 
@@ -218,15 +213,15 @@ public class ViewMessagesController {
                 //this.panelMessages.getListboxNewMembersToAssign().remove(this.panelMessages.getListboxNewMembersToAssign().getSelectedIndex());
                 //this.listboxNewMembersToAssign.removeElement(member);
                 ApplicationController.decrementMessageCount();
-                /*int i = 0;
-                 while (i < this.listboxNewMembersToAssign.getSize()) {
-                 if (this.listboxNewMembersToAssign.getElementAt(i).equals(member)) {
-                 //this.listboxNewMembersToAssign.remove(i);
-                 this.listboxNewMembersToAssign.removeElement(member);
-                 break;
+                /*
+                 * int i = 0; while (i <
+                 * this.listboxNewMembersToAssign.getSize()) { if
+                 * (this.listboxNewMembersToAssign.getElementAt(i).equals(member))
+                 * { //this.listboxNewMembersToAssign.remove(i);
+                 * this.listboxNewMembersToAssign.removeElement(member); break;
+                 * } i++;
                  }
-                 i++;
-                 }*/
+                 */
                 //this.panelMessages.getListboxNewMembersToAssign().setModel(listboxNewMembersToAssign);
             } catch (PersistenceException ex) {
                 Logger.getLogger(ViewMessagesController.class.getName()).log(Level.SEVERE, null, ex);

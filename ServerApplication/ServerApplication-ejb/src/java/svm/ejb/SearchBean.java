@@ -46,7 +46,6 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             DomainFacade.closeSession(sessionId);
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenceException(ex);
         }
         this.sessionId = null;
         super.abort();
@@ -58,7 +57,6 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             DomainFacade.closeSession(sessionId);
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            throw new PersistenceException(ex);
         }
         this.sessionId = null;
         super.commit();

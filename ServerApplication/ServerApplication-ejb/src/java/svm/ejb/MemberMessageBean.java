@@ -15,7 +15,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import sun.org.mozilla.javascript.internal.ObjArray;
 import svm.messages.MemberMessage;
 import svm.messages.SubTeamMessage;
 
