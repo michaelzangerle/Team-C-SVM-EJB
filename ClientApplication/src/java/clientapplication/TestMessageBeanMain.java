@@ -25,14 +25,17 @@ import svm.messages.MemberMessage;
  */
 public class TestMessageBeanMain {
 
-    @EJB
+    @EJB(mappedName = "MemberMessageBean")
     private static MemberMessageBeanRemote memberMessageBean;
     @EJB
     private static MemberBeanRemote memberController;
     @EJB
     private static SearchBeanRemote searchController;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws LogicException, DomainException, PersistenceException {
+        
+        testJMS();
+        testMessageController();
     }
 
     public static void testJMS() throws LogicException, DomainException, PersistenceException {
@@ -46,7 +49,7 @@ public class TestMessageBeanMain {
         memberController.setEntryDate(new Date());
         memberController.setLat("");
         memberController.setLong("");
-        memberController.setFirstName("asdf");
+        memberController.setFirstName("000aaaa");
         memberController.setGender("M");
         memberController.setLastName("asdf");
         memberController.setSocialNumber("asdf");

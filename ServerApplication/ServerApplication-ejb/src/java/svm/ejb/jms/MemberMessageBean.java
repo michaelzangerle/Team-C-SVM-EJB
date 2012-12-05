@@ -29,7 +29,7 @@ import svm.messages.MemberMessage;
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "MessageBean")
 })
 
-@Stateful
+@Stateful(mappedName = "MemberMessageBean")
 public class MemberMessageBean extends Observable implements MessageListener, MemberMessageBeanRemote {
     
     public MemberMessageBean() {
@@ -60,6 +60,7 @@ public class MemberMessageBean extends Observable implements MessageListener, Me
     
     private boolean myMemberMessage(MemberMessage x) {
         return true;
+        // TODO
         //throw new UnsupportedOperationException("Not yet implemented");
     }
 

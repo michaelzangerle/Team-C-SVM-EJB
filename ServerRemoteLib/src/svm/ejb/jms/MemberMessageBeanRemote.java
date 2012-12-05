@@ -4,6 +4,7 @@
  */
 package svm.ejb.jms;
 
+import java.io.Serializable;
 import java.util.Observer;
 import javax.ejb.Remote;
 
@@ -12,7 +13,7 @@ import javax.ejb.Remote;
  * @author mike
  */
 @Remote
-public interface MemberMessageBeanRemote {
+public interface MemberMessageBeanRemote extends Serializable {
 
     void addObserver(Observer o);
 
