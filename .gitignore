@@ -8,6 +8,8 @@
 /ServerApplication/ServerApplication-ejb/dist/
 /ServerApplication/dist/
 /ClientApplication/dist/
+/ClientGUI/dist/
+/ClientGUI/build/
 
 
 # NetBeans specific #
@@ -32,3 +34,4 @@ private.xml
 /ServerApplication/ServerApplication-ejb/nbproject/private/
 /ServerRemoteLib/nbproject/private/
 /ClientApplication/nbproject/private/
+/ClientGUI/nbproject/private/
