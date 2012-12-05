@@ -29,7 +29,7 @@ import svm.messages.MemberMessage;
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "MessageBean")
 })
 
-@Stateful(mappedName = "MemberMessageBean")
+@Stateful(mappedName = "MemberMessage")
 public class MemberMessageBean extends Observable implements MessageListener, MemberMessageBeanRemote {
     
     public MemberMessageBean() {

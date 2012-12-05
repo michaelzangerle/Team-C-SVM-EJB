@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.Stateful;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -18,7 +19,7 @@ import svm.messages.SubTeamMessage;
 
 /**
  *
- * @author Gigis Home
+ * @author mike
  */
 @MessageDriven(mappedName = "jms/svm/subTeam", activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
@@ -27,7 +28,8 @@ import svm.messages.SubTeamMessage;
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = "SubTeamMessageBean"),
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "SubTeamMessageBean")
 })
-public class SubTeamMessageBean extends Observable implements MessageListener {
+@Stateful
+public class SubTeamMessageBean extends Observable implements MessageListener,SubTeamMessageBeanRemote {
     
     public SubTeamMessageBean() {
     }
@@ -40,7 +42,7 @@ public class SubTeamMessageBean extends Observable implements MessageListener {
             Serializable x = msg.getObject();
             receiveSubTeamMessage((SubTeamMessage) x);
         } catch (JMSException ex) {
-            Logger.getLogger(MemberMessageBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubTeamMessageBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

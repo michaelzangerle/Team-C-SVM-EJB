@@ -25,7 +25,7 @@ import svm.messages.MemberMessage;
  */
 public class TestMessageBeanMain {
 
-    @EJB(mappedName = "MemberMessageBean")
+    @EJB(mappedName = "MemberMessage")
     private static MemberMessageBeanRemote memberMessageBean;
     @EJB
     private static MemberBeanRemote memberController;
