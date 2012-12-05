@@ -6,7 +6,6 @@ package svm.ejb;
 
 import java.io.Serializable;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
@@ -15,7 +14,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import sun.org.mozilla.javascript.internal.ObjArray;
 import svm.messages.MemberMessage;
 import svm.messages.SubTeamMessage;
 
@@ -23,51 +21,42 @@ import svm.messages.SubTeamMessage;
  *
  * @author Gigis Home
  */
-@MessageDriven(mappedName = "jms/svm/member", activationConfig = {
+@MessageDriven(mappedName = "jms/svm/subTeam", activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
     @ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
-    @ActivationConfigProperty(propertyName = "clientId", propertyValue = "MessageBean"),
-    @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "MessageBean")
+    @ActivationConfigProperty(propertyName = "clientId", propertyValue = "SubTeamMessageBean"),
+    @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "SubTeamMessageBean")
 })
-public class MemberMessageBean extends Observable implements MessageListener {
+public class SubTeamMessageBean extends Observable implements MessageListener {
     
-    public MemberMessageBean() {
+    public SubTeamMessageBean() {
     }
     
     @Override
     public void onMessage(Message message) {
+        
         try {
             ObjectMessage msg = (ObjectMessage) message;
             Serializable x = msg.getObject();
-            receiveMemberMessage((MemberMessage) x);
+            receiveSubTeamMessage((SubTeamMessage) x);
         } catch (JMSException ex) {
             Logger.getLogger(MemberMessageBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
     }
-    
-    private void receiveMemberMessage(MemberMessage x) {
-        if (myMemberMessage(x)) {
-            informObserver(x);
+
+    private void receiveSubTeamMessage(SubTeamMessage subTeamMessage) {
+        if (mySubTeamMessage(subTeamMessage)) {
+            informObserver(subTeamMessage);
         }
     }
-    
-    private void informObserver(MemberMessage message) {
-        super.notifyObservers(message);
-    }
-    
-    private boolean myMemberMessage(MemberMessage x) {
+
+    private boolean mySubTeamMessage(SubTeamMessage subTeamMessage) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    
-    
-    
-    
-   
-    
-    
-    
+    private void informObserver(SubTeamMessage subTeamMessage) {
+        super.notifyObservers(subTeamMessage);
+    }
 }

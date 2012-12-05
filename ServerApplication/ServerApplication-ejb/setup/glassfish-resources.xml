@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <admin-object-resource enabled="true" jndi-name="jms/svm/subTeam"  res-type="javax.jms.Topic"  res-adapter="jmsra">
+        <property name="Name" value="PhysicalTopic"/>
+    </admin-object-resource>
+    <connector-connection-pool name="jms/svm/subTeamFactoryPool"  connection-definition-name="javax.jms.TopicConnectionFactory"  resource-adapter-name="jmsra"/>
+    <connector-resource enabled="true" jndi-name="jms/svm/subTeamFactory" pool-name="jms/svm/subTeamFactoryPool"  />
+    <admin-object-resource enabled="true" jndi-name="jms/svm/member"  res-type="javax.jms.Topic"  res-adapter="jmsra">
+        <property name="Name" value="PhysicalTopic"/>
+    </admin-object-resource>
+    <connector-connection-pool name="jms/svm/memberFactoryPool"  connection-definition-name="javax.jms.TopicConnectionFactory"  resource-adapter-name="jmsra"/>
+    <connector-resource enabled="true" jndi-name="jms/svm/memberFactory" pool-name="jms/svm/memberFactoryPool"  />
+</resources>
