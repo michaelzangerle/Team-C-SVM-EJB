@@ -5,35 +5,41 @@
 package clientapplication;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.ejb.EJB;
+import javax.jms.ObjectMessage;
 import svm.ejb.MemberBeanRemote;
 import svm.ejb.SearchBeanRemote;
+import svm.ejb.dto.SportDTO;
+import svm.ejb.exceptions.DomainException;
+import svm.ejb.exceptions.LogicException;
+import svm.ejb.exceptions.PersistenceException;
+import svm.ejb.jms.MemberMessageBeanRemote;
+import svm.messages.MemberMessage;
 
 /**
  *
  * @author mike
  */
 public class TestMessageBeanMain {
-    
+
+    @EJB
+    private static MemberMessageBeanRemote memberMessageBean;
     @EJB
     private static MemberBeanRemote memberController;
-    
     @EJB
     private static SearchBeanRemote searchController;
-    
-    
-    
-    
+
     public static void main(String[] args) {
-        
-        
-        
     }
-    
-    
-     public static void testJMS() throws svm.persistence.abstraction.exceptions.NotSupportedException, ExistingTransactionException, IllegalGetInstanceException, NoSessionFoundException, NoTransactionException, InstantiationException, IllegalAccessException, RemoteException, DomainParameterCheckException, NotAllowException, DomainAttributeException {
+
+    public static void testJMS() throws LogicException, DomainException, PersistenceException {
+
+        searchController.start();
+        List<SportDTO> sports = searchController.getSports();
+        searchController.abort();
 
         memberController.start();
         memberController.setBirthDate(new Date());
@@ -47,23 +53,24 @@ public class TestMessageBeanMain {
         memberController.setTitle("asdf");
         memberController.setUsername("sadf");
 
-        memberController.setSport(sport);
+        memberController.setSport(sports.get(0));
         memberController.commit();
     }
 
-    public static void testMessageController() throws svm.persistence.abstraction.exceptions.NotSupportedException, ExistingTransactionException, IllegalGetInstanceException, NoSessionFoundException, NoTransactionException, InstantiationException, IllegalAccessException, RemoteException, JMSException, InterruptedException {
+    public static void testMessageController() {
 
-        
-        memberMessageController.addObserver(new Observer() {
 
+        memberMessageBean.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                System.out.println("MemberMessage new Member: " + message.getMember());
+                ObjectMessage message = (ObjectMessage) arg;
+                try {
+                     int m = ((MemberMessage) message.getObject()).getMember();
+                     System.out.println("MemberMessage new Member: " + m);
+                } catch (Exception e) {
+                }
+               
             }
         });
-        messageController.start();
-        // messageController.updateMessages();
     }
-
-  
 }
