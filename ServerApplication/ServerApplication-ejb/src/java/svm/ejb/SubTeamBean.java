@@ -85,6 +85,11 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        start(this.teamDTO, this.contestDTO);
+    }
+
+    @Override
     public void commit() throws LogicException, PersistenceException {
         try {
             startTransaction();

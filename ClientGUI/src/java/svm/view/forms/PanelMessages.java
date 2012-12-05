@@ -6,9 +6,9 @@ package svm.view.forms;
 
 import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
-import svm.logic.abstraction.jmsobjects.IMemberMessage;
-import svm.logic.abstraction.jmsobjects.ISubTeamMessage;
-import svm.logic.abstraction.transferobjects.ITransferMember;
+import svm.ejb.dto.MemberDTO;
+import svm.messages.MemberMessage;
+import svm.messages.SubTeamMessage;
 import svm.view.controller.ViewMessagesController;
 
 /**
@@ -475,15 +475,15 @@ public class PanelMessages extends javax.swing.JPanel {
         viewMessagesController.showTeamMembers();
     }
     
-    public void addMemberMsg(IMemberMessage msg){
+    public void addMemberMsg(MemberMessage msg){
         this.viewMessagesController.addMemberMsg(msg);
     }
     
-    public void addSubTeamMessage(ISubTeamMessage msg){
+    public void addSubTeamMessage(SubTeamMessage msg){
         this.viewMessagesController.addSubTeamMsg(msg);
     }
 
-    public void showMembersToAssign(ITransferMember memberByUID) {
+    public void showMembersToAssign(MemberDTO memberByUID) {
         this.viewMessagesController.showMembersToAssign(memberByUID);
     }
 }

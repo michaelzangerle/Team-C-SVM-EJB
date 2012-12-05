@@ -27,9 +27,9 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
 public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamModelDAO> implements SubTeamConfirmationBeanRemote {
 
     private IMember member;
-    private ISubTeam subteam;
-    private MemberDTO transferMember;
-    private SubTeamDTO transferSubTeam;
+    private ISubTeam subTeam;
+    private MemberDTO memberDTO;
+    private SubTeamDTO subTeamDTO;
 
     public SubTeamConfirmationBean() {
         super(DomainFacade.getSubTeamModelDAO());
@@ -37,13 +37,13 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
 
     @Override
     public MemberDTO getMember() {
-        return this.transferMember;
+        return this.memberDTO;
     }
 
     @Override
     public void setConfirmation(boolean confirm, String comment) {
         for (ISubTeamsHasMembers tmp : this.member.getSubTeamsHasMembersForPerson()) {
-            if (tmp.getSubTeam().equals(this.subteam)) {
+            if (tmp.getSubTeam().equals(this.subTeam)) {
                 tmp.setComment(comment);
                 tmp.setConfirmed(confirm);
                 return;
@@ -54,16 +54,21 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
     public void start(MemberDTO member, SubTeamDTO subteam) throws PersistenceException, DomainException, LogicException {
         try {
             super.start();
-            this.subteam = DomainFacade.getSubTeamModelDAO().getByUID(getSessionId(), subteam.getUID());
+            this.subTeam = DomainFacade.getSubTeamModelDAO().getByUID(getSessionId(), subteam.getUID());
             this.member = DomainFacade.getMemberModelDAO().getByUID(getSessionId(), member.getUID());
             reattachObjectToSession(this.member);
-            reattachObjectToSession(this.subteam);
-            this.transferMember = new MemberDTO(this.member);
-            this.transferSubTeam = new SubTeamDTO(this.subteam);
+            reattachObjectToSession(this.subTeam);
+            this.memberDTO = new MemberDTO(this.member);
+            this.subTeamDTO = new SubTeamDTO(this.subTeam);
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(SubTeamConfirmationBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        start(this.memberDTO, this.subTeamDTO);
     }
 
     @Override
@@ -76,7 +81,7 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
         startTransaction();
         try {
             DomainFacade.getMemberModelDAO().saveOrUpdate(getSessionId(), member);
-            DomainFacade.getSubTeamModelDAO().saveOrUpdate(getSessionId(), subteam);
+            DomainFacade.getSubTeamModelDAO().saveOrUpdate(getSessionId(), subTeam);
         } catch (NoSessionFoundException ex) {
             throw new PersistenceException(ex);
         }

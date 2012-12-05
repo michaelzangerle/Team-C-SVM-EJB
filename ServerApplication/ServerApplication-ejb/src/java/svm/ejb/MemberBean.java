@@ -51,6 +51,11 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        start(this.memberDTO);
+    }
+
+    @Override
     public void start() throws PersistenceException, DomainException, LogicException {
         try {
             super.start();

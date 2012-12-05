@@ -16,6 +16,8 @@ public interface SvmBean {
 
     void start() throws PersistenceException, DomainException, LogicException;
 
+    void restart() throws PersistenceException, DomainException, LogicException;
+
     void commit() throws LogicException, PersistenceException;
 
     void abort() throws LogicException, PersistenceException;

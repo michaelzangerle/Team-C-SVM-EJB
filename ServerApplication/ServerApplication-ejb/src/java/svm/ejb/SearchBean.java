@@ -36,6 +36,11 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        start();
+    }
+
+    @Override
     public void abort() throws PersistenceException, LogicException {
         try {
             DomainFacade.closeSession(sessionId);

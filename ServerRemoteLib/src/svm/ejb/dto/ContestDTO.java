@@ -19,6 +19,7 @@ public class ContestDTO extends DTO<IContest> {
     private float fee;
     private ContactDetailsDTO contactDetails;
     private SportDTO sport;
+    private boolean finished;
 
     public String getName() {
         return name;
@@ -43,7 +44,11 @@ public class ContestDTO extends DTO<IContest> {
     public SportDTO getSport() {
         return sport;
     }
-   
+
+    public boolean isFinished() {
+        return finished;
+    }
+
     public ContestDTO(IContest m) {
         super(m);
         doUpdate(m);
@@ -62,5 +67,6 @@ public class ContestDTO extends DTO<IContest> {
         if (!contest.getSport().isNull()) {
             this.sport = new SportDTO(contest.getSport());
         }
+        this.finished = contest.getFinished();
     }
 }

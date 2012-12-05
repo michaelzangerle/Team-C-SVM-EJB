@@ -59,6 +59,11 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        start(this.contestDTO);
+    }
+
+    @Override
     @PermitAll
     public void start(ContestDTO contest) throws PersistenceException, DomainException, LogicException {
         super.start();

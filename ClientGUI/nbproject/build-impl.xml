@@ -474,8 +474,12 @@ exists or setup the property manually. For example like this:
             </condition>
         </fail>
     </target>
-    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps"/>
-    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps"/>
+    <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
+        <ant antfile="${project.ServerRemoteLib}/build.xml" inheritall="false" target="jar"/>
+    </target>
+    <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
+        <ant antfile="${project.ServerRemoteLib}/build.xml" inheritall="false" target="jar"/>
+    </target>
     <target depends="init, -check-main-class, -deps-module-jar, -deps-ear-jar" name="deps-jar"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
         <mkdir dir="${classes.dir}"/>
@@ -485,10 +489,29 @@ exists or setup the property manually. For example like this:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile" if="is.server.weblogic" name="library-inclusion-in-archive">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <basename file="${reference.ServerRemoteLib.jar}" property="manifest.reference.ServerRemoteLib.jar"/>
+        <basename file="${libs.swing-layout.classpath}" property="manifest.libs.swing-layout.classpath"/>
+        <basename file="${file.reference.JTattoo.jar}" property="manifest.file.reference.JTattoo.jar"/>
+        <basename file="${file.reference.jcalendar-1.4.jar}" property="manifest.file.reference.jcalendar-1.4.jar"/>
+        <basename file="${file.reference.swing-layout-1.0.4.jar}" property="manifest.file.reference.swing-layout-1.0.4.jar"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 "/>
+            <attribute name="jar-1-Extension-Name" value="${manifest.reference.ServerRemoteLib.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.libs.swing-layout.classpath}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.JTattoo.jar}"/>
+            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.jcalendar-1.4.jar}"/>
+            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.swing-layout-1.0.4.jar}"/>
+        </manifest>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <copyfiles files="${reference.ServerRemoteLib.jar}" manifestproperty="manifest.reference.ServerRemoteLib.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.swing-layout.classpath}" manifestproperty="manifest.libs.swing-layout.classpath" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.JTattoo.jar}" manifestproperty="manifest.file.reference.JTattoo.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jcalendar-1.4.jar}" manifestproperty="manifest.file.reference.jcalendar-1.4.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.swing-layout-1.0.4.jar}" manifestproperty="manifest.file.reference.swing-layout-1.0.4.jar" todir="${dist.ear.dir}/lib"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Class-Path" value="${manifest.reference.ServerRemoteLib.jar} lib/${manifest.reference.ServerRemoteLib.jar} ${manifest.libs.swing-layout.classpath} lib/${manifest.libs.swing-layout.classpath} ${manifest.file.reference.JTattoo.jar} lib/${manifest.file.reference.JTattoo.jar} ${manifest.file.reference.jcalendar-1.4.jar} lib/${manifest.file.reference.jcalendar-1.4.jar} ${manifest.file.reference.swing-layout-1.0.4.jar} lib/${manifest.file.reference.swing-layout-1.0.4.jar} "/>
+        </manifest>
     </target>
     <target name="-copy-meta-inf">
         <copy todir="${classes.dir}">
@@ -985,7 +1008,9 @@ exists or setup the property manually. For example like this:
                 CLEANUP SECTION
                 ===============
             -->
-    <target depends="init" name="deps-clean" unless="no.deps"/>
+    <target depends="init" name="deps-clean" unless="no.deps">
+        <ant antfile="${project.ServerRemoteLib}/build.xml" inheritall="false" target="clean"/>
+    </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>

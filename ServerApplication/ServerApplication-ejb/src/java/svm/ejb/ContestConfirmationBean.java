@@ -51,6 +51,11 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
+    public void restart() throws PersistenceException, DomainException, LogicException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void commit() throws LogicException, svm.ejb.exceptions.PersistenceException {
         try {
             startTransaction();
