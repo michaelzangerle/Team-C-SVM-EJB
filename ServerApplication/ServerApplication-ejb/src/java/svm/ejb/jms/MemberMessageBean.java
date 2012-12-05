@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package svm.ejb;
+package svm.ejb.jms;
 
 import java.io.Serializable;
 import java.util.Observable;
@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.Stateful;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -18,7 +19,7 @@ import svm.messages.MemberMessage;
 
 /**
  *
- * @author Gigis Home
+ * @author mike
  */
 @MessageDriven(mappedName = "jms/svm/member", activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
@@ -27,7 +28,9 @@ import svm.messages.MemberMessage;
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = "MessageBean"),
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "MessageBean")
 })
-public class MemberMessageBean extends Observable implements MessageListener {
+
+@Stateful
+public class MemberMessageBean extends Observable implements MessageListener, MemberMessageBeanRemote {
     
     public MemberMessageBean() {
     }
@@ -56,15 +59,8 @@ public class MemberMessageBean extends Observable implements MessageListener {
     }
     
     private boolean myMemberMessage(MemberMessage x) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return true;
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    
-    
-    
-    
-   
-    
-    
-    
 }
