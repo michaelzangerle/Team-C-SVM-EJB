@@ -13,11 +13,13 @@ public class MemberMessage  implements IMessage{
     private MessageType type;
     private int member;
     private int receiver;
+    private String text;
 
-    public MemberMessage(MessageType type, int member, int receiver) {
+    public MemberMessage(MessageType type, int member, int receiver, String text) {
         this.type = type;
         this.member = member;
         this.receiver = receiver;
+        this.text = text;
     }
 
 
