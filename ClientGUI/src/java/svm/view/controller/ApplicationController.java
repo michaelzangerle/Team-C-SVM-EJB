@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import svm.ejb.*;
+import svm.ejb.exceptions.LogicException;
+import svm.ejb.exceptions.PersistenceException;
 import svm.view.forms.*;
 
 /**
@@ -32,6 +34,8 @@ public class ApplicationController {
     private static ContestConfirmationBeanRemote contestConfirmationBean;
     @EJB
     private static ContestBeanRemote contestBean;
+    @EJB
+    private static SvmSessionBeanRemote sessionBean;
     /**
      * The two main forms login and main applicationwindow
      *
@@ -56,21 +60,21 @@ public class ApplicationController {
     public ApplicationController() {
     }
 
-    public void init() {
+    public void init() throws LogicException, PersistenceException {
         this.panelContests = new PanelContests();
         this.panelMembers = new PanelMembers();
         this.panelMessages = new PanelMessages();
         this.viewContestCtrl = new ViewContestController(panelContests);
         this.viewMemberCtrl = new ViewMemberController(panelMembers);
-        //this.viewRightsHandler = new ViewRightsHandler(this.user, this);
+        this.viewRightsHandler = new ViewRightsHandler(sessionBean.getAuthObject(), this);
     }
 
-    public static void main(String args[]) throws UnknownHostException {
+    public static void main(String args[]) throws LogicException, PersistenceException {
         // Start the application
         new ApplicationController().startMainForm("TEST");
     }
 
-    private void startMainForm(String username) {
+    private void startMainForm(String username) throws LogicException, PersistenceException {
         init();
         mainForm = new MainForm(this);
         mainForm.setLblUser(username);
@@ -184,7 +188,7 @@ public class ApplicationController {
     }
 
     public MainForm getMainForm() {
-        return this.mainForm;
+        return ApplicationController.mainForm;
     }
 
     public PanelContests getPanelContests() {
