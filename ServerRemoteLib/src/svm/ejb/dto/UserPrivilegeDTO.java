@@ -12,6 +12,12 @@ import svm.domain.abstraction.modelInterfaces.IUserPrivilege;
  */
 public class UserPrivilegeDTO extends DTO<IUserPrivilege> {
 
+    String name;
+
+    public String getName() {
+        return name;
+    }
+
     public UserPrivilegeDTO(IUserPrivilege m) {
         super(m);
         doUpdate(m);
@@ -19,5 +25,6 @@ public class UserPrivilegeDTO extends DTO<IUserPrivilege> {
 
     @Override
     protected void doUpdate(IUserPrivilege m) {
+        name = m.getName();
     }
 }
