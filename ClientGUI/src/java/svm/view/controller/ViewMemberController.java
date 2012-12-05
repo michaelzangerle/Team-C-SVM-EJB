@@ -227,7 +227,7 @@ public class ViewMemberController {
             } else {
                 panelMembers.getCmbGender().setSelectedIndex(1);
             }
-            panelMembers.getTfUserName().setText(tmp.getUsername());
+            panelMembers.getTfUserName().setText(tmp.getUserName());
             panelMembers.getTfMail1().setText(tmp.getEmail1());
             panelMembers.getTfMail2().setText(tmp.getEmail2());
             panelMembers.getTfPhone1().setText(tmp.getPhone1());
@@ -236,8 +236,8 @@ public class ViewMemberController {
             panelMembers.getTfStreetNumber().setText(tmp.getStreetNumber());
             panelMembers.getDcBirthDate().setDate(tmp.getBirthDate());
             panelMembers.getDcEntryDate().setDate(tmp.getEntryDate());
-            panelMembers.getCheckMemberFee().setSelected(tmp.getPaid());
-            if (tmp.getPaid()) {
+            panelMembers.getCheckMemberFee().setSelected(tmp.isHasPaidFee());
+            if (tmp.isHasPaidFee()) {
                 panelMembers.getCheckMemberFee().setEnabled(false);
             }
             this.cmbSport.setSelectedItem(tmp.getSport());

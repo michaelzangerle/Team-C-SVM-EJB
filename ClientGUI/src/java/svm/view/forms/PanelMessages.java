@@ -472,7 +472,6 @@ public class PanelMessages extends javax.swing.JPanel {
     private void init() {
        
         viewMessagesController.showAllTeams();
-        viewMessagesController.showTeamMembers();
     }
     
     public void addMemberMsg(MemberMessage msg){
