@@ -52,7 +52,7 @@ public class LocationDTO extends DTO<ILocation> {
     public String getLongitude() {
         return longitude;
     }
-    
+
     public LocationDTO(ILocation m) {
         super(m);
         doUpdate(m);
@@ -68,5 +68,10 @@ public class LocationDTO extends DTO<ILocation> {
         this.community = location.getCommunity();
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
+    }
+
+    @Override
+    public String toString() {
+        return getPostalCode() + " " + getPlaceName();
     }
 }

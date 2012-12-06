@@ -159,4 +159,9 @@ public class MemberDTO extends DTO<IMember> {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return getFirstName() + " " + getLastName();
+    }
 }

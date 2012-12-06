@@ -27,4 +27,9 @@ public class MatchTypeDTO extends DTO<IMatchType> {
     protected void doUpdate(IMatchType matchType) {
         name = matchType.getName();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

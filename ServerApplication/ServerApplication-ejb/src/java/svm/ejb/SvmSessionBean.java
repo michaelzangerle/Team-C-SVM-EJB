@@ -40,11 +40,14 @@ public class SvmSessionBean implements SvmSessionBeanRemote {
         Integer sessionId = DomainFacade.generateSessionId();
         try {
             String user = ejbContext.getCallerPrincipal().getName();
+            System.out.println(user);
             try {
                 List<IMember> m = DomainFacade.getMemberModelDAO().get(sessionId, user);
+                System.out.println(m.size());
                 if (m.size() != 1) {
                     m = DomainFacade.getMemberModelDAO().get(sessionId, "tf-test");
                 }
+                System.out.println(m.get(0).getUserName());
                 return new AuthDTO(m.get(0));
             } catch (NoSessionFoundException ex) {
                 Logger.getLogger(SvmSessionBean.class.getName()).log(Level.SEVERE, null, ex);

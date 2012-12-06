@@ -27,4 +27,9 @@ public class UserPrivilegeDTO extends DTO<IUserPrivilege> {
     protected void doUpdate(IUserPrivilege m) {
         name = m.getName();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

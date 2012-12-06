@@ -106,6 +106,7 @@ public class AuthDTO extends DTO<IMember> {
 
     public AuthDTO(IMember m) {
         super(m);
+        doUpdate(m);
     }
 
     @Override
@@ -171,5 +172,10 @@ public class AuthDTO extends DTO<IMember> {
         if (member.isIn(IUserPrivilege.Privileges.ADMIN) || member.isIn(IUserPrivilege.Privileges.MANAGER) || member.isIn(IUserPrivilege.Privileges.CONTEST_MANAGER)) {
             isAllowedForContestAdding = true;
         }
+    }
+
+    @Override
+    public String toString() {
+        return getFirstName() + " " + getLastName();
     }
 }

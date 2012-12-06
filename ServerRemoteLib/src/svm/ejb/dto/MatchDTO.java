@@ -115,4 +115,9 @@ public class MatchDTO extends DTO<IMatch> {
             return new InternalTeamDTO(match.getHomeInternal());
         }
     }
+
+    @Override
+    public String toString() {
+        return getName() + " [" + getHome() + " vs. " + getAway() + ": " + getResultHome() + " : " + getResultAway() + "]";
+    }
 }

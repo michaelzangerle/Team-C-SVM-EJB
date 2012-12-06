@@ -71,11 +71,12 @@ public class ApplicationController {
 
     public static void main(String args[]) throws LogicException, PersistenceException {
         // Start the application
-        new ApplicationController().startMainForm("TEST");
+        new ApplicationController().startMainForm();
     }
 
-    private void startMainForm(String username) throws LogicException, PersistenceException {
+    private void startMainForm() throws LogicException, PersistenceException {
         init();
+        String username = sessionBean.getAuthObject().toString();
         mainForm = new MainForm(this);
         mainForm.setLblUser(username);
         mainForm.getLblPrivileges().setVisible(false);

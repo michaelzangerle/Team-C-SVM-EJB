@@ -69,4 +69,9 @@ public class ContestDTO extends DTO<IContest> {
         }
         this.finished = contest.getFinished();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

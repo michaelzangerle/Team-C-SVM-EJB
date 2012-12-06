@@ -4,6 +4,10 @@
  */
 package clientgui;
 
+import svm.ejb.exceptions.LogicException;
+import svm.ejb.exceptions.PersistenceException;
+import svm.view.controller.ApplicationController;
+
 /**
  *
  * @author Administrator
@@ -13,7 +17,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws LogicException, PersistenceException {
+        ApplicationController.main(args);
     }
 }

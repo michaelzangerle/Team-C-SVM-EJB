@@ -46,4 +46,9 @@ public class DepartmentDTO extends DTO<IDepartment> {
         this.description = department.getDescription();
         this.alias = department.getAlias();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

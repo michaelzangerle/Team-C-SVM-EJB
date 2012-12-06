@@ -33,4 +33,9 @@ public class SportDTO extends DTO<ISport> {
         this.name = m.getName();
         this.department = new DepartmentDTO(m.getDepartment());
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

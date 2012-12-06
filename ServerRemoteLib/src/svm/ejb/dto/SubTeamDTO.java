@@ -27,4 +27,9 @@ public class SubTeamDTO extends DTO<ISubTeam> {
     protected void doUpdate(ISubTeam subTeam) {
         name = subTeam.getName();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

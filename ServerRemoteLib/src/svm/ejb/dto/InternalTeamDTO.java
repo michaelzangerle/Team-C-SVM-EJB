@@ -41,4 +41,9 @@ public class InternalTeamDTO extends TeamDTO {
         this.contactPerson = new MemberDTO(team.getContactPerson());
         this.alias = team.getAlias();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

@@ -41,4 +41,9 @@ public class ExternalTeamDTO extends TeamDTO {
         this.contactDetails = new ContactDetailsDTO(team.getContactDetails());
         this.alias = team.getAlias();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
