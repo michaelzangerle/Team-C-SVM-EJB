@@ -9,7 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.exception.DomainAttributeException;
@@ -29,6 +31,8 @@ import svm.persistence.abstraction.exceptions.NotSupportedException;
  * @author mike
  */
 @Stateful
+@DeclareRoles({"isAllowedForContestDetailsChanging", "isAllowedForContestMatchAdding", "isAllowedForContestTeamsChanging"})
+@RolesAllowed({"isAllowedForContestDetailsChanging", "isAllowedForContestMatchAdding", "isAllowedForContestTeamsChanging"})
 public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> implements ContestBeanRemote {
 
     private IContest contest;
@@ -40,6 +44,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void start() throws PersistenceException, DomainException, LogicException {
         super.start();
         try {
@@ -59,6 +64,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         start(this.contestDTO);
     }
@@ -79,6 +85,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, PersistenceException {
         try {
             startTransaction();
@@ -93,11 +100,13 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setContestName(String name) throws DomainException, LogicException {
         check();
         try {
@@ -109,6 +118,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setContestStartDate(Date start) throws DomainException, LogicException {
         check();
         try {
@@ -120,6 +130,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setContestEndDate(Date end) throws DomainException, LogicException {
         check();
         try {
@@ -131,6 +142,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setContestFee(float val) throws DomainException, LogicException {
         check();
         try {
@@ -144,12 +156,14 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public ContestDTO getTransferContest() throws LogicException {
         check();
         return contestDTO;
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setPhone1(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setPhone1(val);
@@ -157,6 +171,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setPhone2(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setPhone2(val);
@@ -164,6 +179,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setEmail1(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setEmail1(val);
@@ -171,6 +187,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setEmail2(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setEmail2(val);
@@ -178,6 +195,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setFax(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setFax(val);
@@ -185,6 +203,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setStreet(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setStreet(val);
@@ -192,6 +211,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setStreetNumber(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setStreetNumber(val);
@@ -199,6 +219,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setLat(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setCoordLat(val);
@@ -206,6 +227,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setLong(String val) throws DomainException, LogicException {
         check();
         this.contest.getContactDetails().setCoordLong(val);
@@ -213,6 +235,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setLocation(LocationDTO location) throws DomainException, LogicException, PersistenceException {
         check();
         try {
@@ -228,6 +251,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestMatchAdding"})
     public void addMatch(TeamDTO home, TeamDTO away, Date start, Date end) throws LogicException, PersistenceException, DomainException {
         check();
         try {
@@ -278,6 +302,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestMatchAdding"})
     public void setDateForMatch(MatchDTO match, Date start) throws LogicException, PersistenceException {
         check();
         IMatch m = null;
@@ -305,6 +330,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestMatchAdding"})
     public void setResult(MatchDTO match, Integer home, Integer away) throws DomainException, PersistenceException, LogicException {
         check();
 
@@ -337,6 +363,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setSport(SportDTO sport) throws LogicException, PersistenceException {
         try {
             check();
@@ -348,6 +375,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestDetailsChanging"})
     public void setFinished(boolean finished) throws LogicException {
         check();
         this.contest.setFinished(finished);
@@ -355,6 +383,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestTeamsChanging"})
     public void addTeam(TeamDTO team) throws DomainException, PersistenceException, LogicException {
         check();
         try {
@@ -383,6 +412,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestTeamsChanging"})
     public void removeTeam(TeamDTO team) throws DomainException, LogicException, PersistenceException {
         check();
         try {
@@ -407,6 +437,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public List<TeamDTO> getTeams() throws PersistenceException, LogicException {
         check();
 
@@ -429,6 +460,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public List<MatchDTO> getMatches() throws PersistenceException, LogicException {
         check();
 
@@ -445,6 +477,7 @@ public class ContestBean extends ControllerDBSessionBean<IContestModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public List<TeamDTO> getPossibleTeams() throws PersistenceException, DomainException, LogicException {
         check();
         List<TeamDTO> result = new LinkedList<TeamDTO>();

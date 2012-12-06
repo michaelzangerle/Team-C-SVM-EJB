@@ -7,6 +7,9 @@ package svm.ejb;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.exception.DomainParameterCheckException;
@@ -22,6 +25,8 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
  * @author mike
  */
 @Stateful
+@DeclareRoles({"isAllowedForSearching"})
+@RolesAllowed({"isAllowedForSearching"})
 public class SearchBean extends ControllerBean implements SearchBeanRemote {
 
     private Integer sessionId;
@@ -30,17 +35,20 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public void start() throws PersistenceException, DomainException, LogicException {
         super.start();
         this.sessionId = DomainFacade.generateSessionId();
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         start();
     }
 
     @Override
+    @PermitAll
     public void abort() throws PersistenceException, LogicException {
         try {
             DomainFacade.closeSession(sessionId);
@@ -52,6 +60,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, PersistenceException {
         try {
             DomainFacade.closeSession(sessionId);
@@ -63,6 +72,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMembers(String firstName, String lastName, DepartmentDTO department) throws LogicException, PersistenceException {
         check();
         try {
@@ -79,6 +89,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMembers(String firstName, String lastName, DepartmentDTO department, Boolean paid) throws LogicException, PersistenceException, DomainException {
         check();
         List<MemberDTO> result = new LinkedList<MemberDTO>();
@@ -108,6 +119,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMembers(String firstName, String lastName) throws LogicException, PersistenceException {
         check();
         List<MemberDTO> result = new LinkedList<MemberDTO>();
@@ -123,6 +135,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMembers(Date birthDateFrom, Date birthDateTo) throws PersistenceException, LogicException {
         check();
         List<MemberDTO> result = new LinkedList<MemberDTO>();
@@ -138,6 +151,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<DepartmentDTO> getDepartments() throws LogicException, PersistenceException {
         check();
         List<DepartmentDTO> result = new LinkedList<DepartmentDTO>();
@@ -153,6 +167,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<LocationDTO> getLocations() throws LogicException, PersistenceException {
         check();
         List<LocationDTO> result = new LinkedList<LocationDTO>();
@@ -168,6 +183,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<ContestDTO> getContests() throws LogicException, PersistenceException {
         check();
         List<ContestDTO> result = new LinkedList<ContestDTO>();
@@ -183,6 +199,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<TeamDTO> getTeams() throws LogicException, PersistenceException {
         check();
         List<TeamDTO> result = new LinkedList<TeamDTO>();
@@ -201,6 +218,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<UserPrivilegeDTO> getUserPrivileges() throws LogicException, PersistenceException {
         check();
         List<UserPrivilegeDTO> result = new LinkedList<UserPrivilegeDTO>();
@@ -217,6 +235,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public List<SportDTO> getSports() throws LogicException, PersistenceException {
         check();
         List<SportDTO> result = new LinkedList<SportDTO>();
@@ -232,6 +251,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public MemberDTO getMemberByUID(int uid) throws LogicException, PersistenceException {
         check();
         try {
@@ -243,6 +263,7 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
     }
 
     @Override
+    @PermitAll
     public SubTeamDTO getSubTeam(int uid) throws LogicException, PersistenceException {
         check();
         try {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-ejb-jar PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 EJB 3.1//EN" "http://glassfish.org/dtds/glassfish-ejb-jar_3_1-1.dtd">
+<glassfish-ejb-jar>
+  <security-role-mapping>
+    <role-name>isAllowedForSearching</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+    <group-name>MEMBER_MANAGER</group-name>
+    <group-name>VIEW_ONLY</group-name>
+    <group-name>CONTEST_MATCH_MANAGER</group-name>
+    <group-name>CONTEST_TEAM_MANAGER</group-name>
+    <group-name>CONTEST_SUBTEAM_MANAGER</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForContestDetailsChanging</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForContestMatchAdding</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForContestTeamsChanging</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+    <group-name>CONTEST_TEAM_MANAGER</group-name>
+  </security-role-mapping>
+  <enterprise-beans/>
+</glassfish-ejb-jar>
