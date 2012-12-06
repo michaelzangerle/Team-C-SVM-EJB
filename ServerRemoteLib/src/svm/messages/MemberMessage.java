@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author Gigis Home
  */
-public class MemberMessage  implements IMessage,Serializable{
+public class MemberMessage  implements IMessage, Serializable{
     
     private MessageType type;
     private int member;

@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
@@ -22,6 +25,8 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
  * @author Administrator
  */
 @Stateful
+@DeclareRoles({"isAllowedForAll"})
+@RolesAllowed({"isAllowedForAll"})
 public class SvmSessionBean implements SvmSessionBeanRemote {
 
     @Resource
@@ -29,6 +34,7 @@ public class SvmSessionBean implements SvmSessionBeanRemote {
     private AuthDTO auth;
 
     @Override
+    @PermitAll
     public AuthDTO getAuthObject() throws LogicException, PersistenceException {
         if (auth == null) {
             auth = getAuth();

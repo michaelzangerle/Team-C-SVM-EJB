@@ -6,6 +6,9 @@ package svm.ejb;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.modelInterfaces.IMember;
@@ -24,6 +27,8 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
  * @author mike
  */
 @Stateful
+@DeclareRoles({"isAllowedForAll"})
+@RolesAllowed({"isAllowedForAll"})
 public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamModelDAO> implements SubTeamConfirmationBeanRemote {
 
     private IMember member;
@@ -36,11 +41,13 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
     }
 
     @Override
+    @PermitAll
     public MemberDTO getMember() {
         return this.memberDTO;
     }
 
     @Override
+    @PermitAll
     public void setConfirmation(boolean confirm, String comment) {
         for (ISubTeamsHasMembers tmp : this.member.getSubTeamsHasMembersForPerson()) {
             if (tmp.getSubTeam().equals(this.subTeam)) {
@@ -67,16 +74,19 @@ public class SubTeamConfirmationBean extends ControllerDBSessionBean<ISubTeamMod
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         start(this.memberDTO, this.subTeamDTO);
     }
 
     @Override
+    @PermitAll
     public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, PersistenceException {
         startTransaction();
         try {

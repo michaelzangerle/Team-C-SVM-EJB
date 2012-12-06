@@ -13,6 +13,8 @@ import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.exception.DomainAttributeException;
 import svm.domain.abstraction.exception.DomainParameterCheckException;
@@ -22,6 +24,7 @@ import svm.ejb.dto.*;
 import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
+import svm.logic.jms.SvmJMSPublisher;
 import svm.persistence.abstraction.exceptions.NoSessionFoundException;
 import svm.persistence.abstraction.exceptions.NotSupportedException;
 
@@ -95,7 +98,16 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
             flush();
             commitTransaction();
             super.commit();
-            // TODO JMS
+            if (isNewMember) {
+                try {
+                    SvmJMSPublisher.getInstance().sendNewMember(member);
+                } catch (JMSException ex) {
+                    Logger.getLogger(MemberBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NamingException ex) {
+                    Logger.getLogger(MemberBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                isNewMember = false;
+            }
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(MemberBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new PersistenceException(ex);

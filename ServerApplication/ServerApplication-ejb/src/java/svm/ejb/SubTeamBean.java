@@ -12,6 +12,8 @@ import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.modelInterfaces.*;
 import svm.domain.abstraction.modeldao.IContestModelDAO;
@@ -20,6 +22,7 @@ import svm.ejb.dto.*;
 import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
+import svm.logic.jms.SvmJMSPublisher;
 import svm.persistence.abstraction.exceptions.NoSessionFoundException;
 import svm.persistence.abstraction.exceptions.NotSupportedException;
 
@@ -58,7 +61,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
 
             this.contest = DomainFacade.getContestModelDAO().getByUID(getSessionId(), contest.getUID());
             reattachObjectToSession(this.contest);
-            ContestDTO contestDTO = new ContestDTO(this.contest);
+            contestDTO = new ContestDTO(this.contest);
 
             this.subTeam = DomainFacade.getSubTeamModelDAO().get(getSessionId(), this.team, this.contest);
             reattachObjectToSession(this.contest);
@@ -104,10 +107,29 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
             getModelDAO().saveOrUpdate(getSessionId(), subTeam);
             flush();
             commitTransaction();
+            String text = subTeam.getContest().getName();
             super.commit();
-            // TODO JMS
 
+            for (IMember m : addedMember) {
+                try {
+                    SvmJMSPublisher.getInstance().sendMemberAddToSubTeam(m, subTeam, text);
+                } catch (JMSException ex) {
+                    Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NamingException ex) {
+                    Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             addedMember.clear();
+
+            for (IMember m : removedMember) {
+                try {
+                    SvmJMSPublisher.getInstance().sendMemberRemoveFormSubTeam(m, subTeam, text);
+                } catch (JMSException ex) {
+                    Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NamingException ex) {
+                    Logger.getLogger(SubTeamBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             removedMember.clear();
         } catch (NoSessionFoundException ex) {
             Logger.getLogger(MemberBean.class.getName()).log(Level.SEVERE, null, ex);

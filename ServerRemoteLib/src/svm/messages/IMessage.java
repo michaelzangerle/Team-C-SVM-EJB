@@ -4,10 +4,13 @@
  */
 package svm.messages;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Gigis Home
  */
-public interface IMessage {
-     int getReceiverUID();
+public interface IMessage extends Serializable {
+
+    int getReceiverUID();
 }

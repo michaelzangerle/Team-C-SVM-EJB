@@ -8,11 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.modelInterfaces.IContestHasTeam;
 import svm.domain.abstraction.modelInterfaces.IMember;
-import svm.domain.abstraction.modeldao.IContestModelDAO;
 import svm.domain.abstraction.modeldao.IContestsHasTeamsModelDao;
 import svm.ejb.dto.ContestHasTeamDTO;
 import svm.ejb.dto.MemberDTO;
@@ -26,6 +28,8 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
  * @author mike
  */
 @Stateful
+@DeclareRoles({"isAllowedForAll"})
+@RolesAllowed({"isAllowedForAll"})
 public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHasTeamsModelDao> implements ContestConfirmationBeanRemote {
 
     List<ContestHasTeamDTO> contestHasTeamDTOs;
@@ -37,6 +41,7 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
+    @PermitAll
     public void start(IMember member) throws PersistenceException, DomainException, LogicException {
         super.start();
         this.member = member;
@@ -51,11 +56,13 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, svm.ejb.exceptions.PersistenceException {
         try {
             startTransaction();
@@ -73,11 +80,13 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
+    @PermitAll
     public void abort() throws svm.ejb.exceptions.PersistenceException, LogicException {
         super.abort();
     }
 
     @Override
+    @PermitAll
     public List<ContestHasTeamDTO> getTeamsForNotConfirmedContests() throws LogicException, PersistenceException {
         check();
         List<ContestHasTeamDTO> result = new LinkedList<ContestHasTeamDTO>();
@@ -90,6 +99,7 @@ public class ContestConfirmationBean extends ControllerDBSessionBean<IContestsHa
     }
 
     @Override
+    @PermitAll
     public void confirmParticipationOfATeam(ContestHasTeamDTO transferTeamHasContest, boolean confirm, String comment, boolean paid) throws LogicException, PersistenceException {
         check();
         try {

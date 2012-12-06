@@ -48,5 +48,21 @@
     <group-name>MANAGER</group-name>
     <group-name>MEMBER_MANAGER</group-name>
   </security-role-mapping>
-  <enterprise-beans/>
+  <security-role-mapping>
+    <role-name>isAllowedForAll</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+    <group-name>MEMBER_MANAGER</group-name>
+    <group-name>VIEW_ONLY</group-name>
+    <group-name>CONTEST_MATCH_MANAGER</group-name>
+    <group-name>CONTEST_SUBTEAM_MANAGER</group-name>
+    <group-name>CONTEST_TEAM_MANAGER</group-name>
+  </security-role-mapping>
+  <enterprise-beans>
+    <ejb>
+      <ejb-name>SvmSessionBean</ejb-name>
+      <jndi-name>SvmSessionBean</jndi-name>
+    </ejb>
+  </enterprise-beans>
 </glassfish-ejb-jar>
