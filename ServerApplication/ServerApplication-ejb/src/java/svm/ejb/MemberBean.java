@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.exception.DomainAttributeException;
@@ -27,6 +30,8 @@ import svm.persistence.abstraction.exceptions.NotSupportedException;
  * @author Administrator
  */
 @Stateful
+@DeclareRoles({"isAllowedForMemberChanging", "isAllowedForMemberAddingPrivileges"})
+@RolesAllowed({"isAllowedForMemberChanging", "isAllowedForMemberAddingPrivileges"})
 public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> implements MemberBeanRemote {
 
     private IMember member;
@@ -38,6 +43,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @PermitAll
     public void start(MemberDTO member) throws PersistenceException, DomainException, LogicException {
         try {
             super.start();
@@ -51,11 +57,13 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         start(this.memberDTO);
     }
 
     @Override
+    @PermitAll
     public void start() throws PersistenceException, DomainException, LogicException {
         try {
             super.start();
@@ -79,6 +87,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, PersistenceException {
         try {
             startTransaction();
@@ -94,17 +103,20 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @PermitAll
     public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 
     @Override
+    @PermitAll
     public MemberDTO getMember() throws LogicException {
         check();
         return memberDTO;
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setTitle(String title) throws LogicException {
         check();
         member.setTitle(title);
@@ -112,6 +124,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setFirstName(String firstName) throws LogicException, DomainException {
         check();
         try {
@@ -124,6 +137,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setLastName(String lastName) throws LogicException, DomainException {
         check();
         try {
@@ -136,6 +150,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setSocialNumber(String socialNumber) throws LogicException, DomainException {
         check();
         try {
@@ -148,6 +163,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setBirthDate(Date birthDate) throws DomainException, LogicException {
         check();
         try {
@@ -160,6 +176,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setGender(String gender) throws DomainException, LogicException {
         check();
         try {
@@ -175,6 +192,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setEntryDate(Date entryDate) throws DomainException, LogicException {
         check();
         try {
@@ -187,6 +205,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setPhone1(String val) throws LogicException {
         check();
         member.getContactDetails().setPhone1(val);
@@ -194,6 +213,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setPhone2(String val) throws LogicException {
         check();
         member.getContactDetails().setPhone2(val);
@@ -201,6 +221,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setEmail1(String val) throws LogicException {
         check();
         member.getContactDetails().setEmail1(val);
@@ -208,6 +229,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setEmail2(String val) throws LogicException {
         check();
         member.getContactDetails().setEmail2(val);
@@ -215,6 +237,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setFax(String val) throws LogicException {
         check();
         member.getContactDetails().setFax(val);
@@ -222,6 +245,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setStreet(String val) throws LogicException {
         check();
         member.getContactDetails().setStreet(val);
@@ -229,6 +253,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setStreetNumber(String val) throws LogicException {
         check();
         member.getContactDetails().setStreetNumber(val);
@@ -236,6 +261,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setLat(String val) throws LogicException {
         check();
         member.getContactDetails().setCoordLat(val);
@@ -243,6 +269,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setLong(String val) throws LogicException {
         check();
         member.getContactDetails().setCoordLong(val);
@@ -250,6 +277,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setLocation(LocationDTO location) throws LogicException, DomainException, PersistenceException {
         check();
         try {
@@ -266,6 +294,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setPaidCurrentYear() throws LogicException, PersistenceException, DomainException {
         check();
         try {
@@ -287,6 +316,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setUsername(String name) throws LogicException, DomainException {
         check();
         try {
@@ -300,6 +330,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberAddingPrivileges")
     public void addPrivilege(UserPrivilegeDTO privilege) throws LogicException, PersistenceException, DomainException {
         check();
         try {
@@ -325,6 +356,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberAddingPrivileges")
     public void removePrivilege(UserPrivilegeDTO privilege) throws LogicException, DomainException, PersistenceException {
         check();
         try {
@@ -344,6 +376,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @PermitAll
     public List<UserPrivilegeDTO> getPrivileges() throws LogicException {
         check();
         List<UserPrivilegeDTO> result = new LinkedList<UserPrivilegeDTO>();
@@ -354,6 +387,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void setSport(SportDTO sport) throws LogicException, PersistenceException {
         check();
         try {
@@ -367,6 +401,7 @@ public class MemberBean extends ControllerDBSessionBean<IMemberModelDAO> impleme
     }
 
     @Override
+    @RolesAllowed("isAllowedForMemberChanging")
     public void addMemberToTeam(TeamDTO team) throws LogicException, DomainException, PersistenceException {
         check();
         try {

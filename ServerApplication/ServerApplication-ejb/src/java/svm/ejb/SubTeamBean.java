@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import svm.domain.abstraction.DomainFacade;
 import svm.domain.abstraction.modelInterfaces.*;
@@ -25,6 +28,8 @@ import svm.persistence.abstraction.exceptions.NotSupportedException;
  * @author mike
  */
 @Stateful
+@DeclareRoles({"isAllowedForContestSubTeamChanging"})
+@RolesAllowed({"isAllowedForContestSubTeamChanging"})
 public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> implements SubTeamBeanRemote {
 
     public SubTeamBean() {
@@ -40,6 +45,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     private List<IMember> removedMember;
 
     @Override
+    @PermitAll
     public void start(TeamDTO team, ContestDTO contest) throws PersistenceException, DomainException, LogicException {
         super.start();
 
@@ -85,11 +91,13 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void restart() throws PersistenceException, DomainException, LogicException {
         start(this.teamDTO, this.contestDTO);
     }
 
     @Override
+    @PermitAll
     public void commit() throws LogicException, PersistenceException {
         try {
             startTransaction();
@@ -108,17 +116,20 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public void abort() throws PersistenceException, LogicException {
         super.abort();
     }
 
     @Override
+    @PermitAll
     public SubTeamDTO getSubTeam() throws LogicException {
         check();
         return subTeamDTO;
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestSubTeamChanging"})
     public void setName(String name) throws LogicException {
         check();
         subTeam.setName(name);
@@ -126,6 +137,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestSubTeamChanging"})
     public void addMember(MemberDTO member) throws LogicException, PersistenceException, DomainException {
         try {
             check();
@@ -162,6 +174,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @RolesAllowed({"isAllowedForContestSubTeamChanging"})
     public void removeMember(MemberDTO member) throws LogicException, DomainException {
         try {
             check();
@@ -193,6 +206,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMembersOfSubTeam() throws LogicException, PersistenceException {
         check();
 
@@ -206,6 +220,7 @@ public class SubTeamBean extends ControllerDBSessionBean<ISubTeamModelDAO> imple
     }
 
     @Override
+    @PermitAll
     public List<MemberDTO> getMemberOfTeam() throws LogicException, PersistenceException {
         List<MemberDTO> members = new LinkedList<MemberDTO>();
         for (IMember member : subTeam.getTeam().getMembers()) {

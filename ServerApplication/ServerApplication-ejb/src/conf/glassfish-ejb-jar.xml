@@ -31,5 +31,22 @@
     <group-name>CONTEST_MANAGER</group-name>
     <group-name>CONTEST_TEAM_MANAGER</group-name>
   </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForContestSubTeamChanging</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>CONTEST_MANAGER</group-name>
+    <group-name>CONTEST_SUBTEAM_MANAGER</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForMemberAddingPrivileges</role-name>
+    <group-name>ADMIN</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>isAllowedForMemberChanging</role-name>
+    <group-name>ADMIN</group-name>
+    <group-name>MANAGER</group-name>
+    <group-name>MEMBER_MANAGER</group-name>
+  </security-role-mapping>
   <enterprise-beans/>
 </glassfish-ejb-jar>
