@@ -5,20 +5,10 @@
 package svm.view.controller;
 
 import java.io.Serializable;
-import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.jms.JMSException;
 import svm.ejb.*;
-import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
-import svm.messages.MemberMessage;
-import svm.messages.MessageType;
-import svm.messages.SubTeamMessage;
 import svm.view.forms.*;
 
 /**
@@ -27,10 +17,12 @@ import svm.view.forms.*;
  */
 public class ApplicationController implements Serializable {
 
-    @EJB
-    private static SubTeamMessageBeanRemote subTeamMessageBean;
-    @EJB
-    private static MemberMessageBeanRemote memberMessageBean;
+    // @EJB
+    // private static SubTeamMessageBeanRemote subTeamMessageBean;
+    // @EJB
+    // private static MemberMessageBeanRemote memberMessageBean;
+    // @EJB
+    // public static SvmSessionBeanRemote sessionBean;
     @EJB
     public static TeamBeanRemote teamBean;
     @EJB
@@ -45,13 +37,12 @@ public class ApplicationController implements Serializable {
     public static ContestConfirmationBeanRemote contestConfirmationBean;
     @EJB
     public static ContestBeanRemote contestBean;
-    @EJB
-    public static SvmSessionBeanRemote sessionBean;
     /**
      * The two main forms login and main applicationwindow
      *
      */
     private static MainForm mainForm;
+    static Object notAuthMessage = "Sie sind nicht berechtigt.";
     /**
      * Panels according to the UseCases
      *
@@ -77,7 +68,8 @@ public class ApplicationController implements Serializable {
         this.panelMessages = new PanelMessages();
         this.viewContestCtrl = new ViewContestController(panelContests);
         this.viewMemberCtrl = new ViewMemberController(panelMembers);
-        this.viewRightsHandler = new ViewRightsHandler(sessionBean.getAuthObject(), this);
+        //this.viewRightsHandler = new ViewRightsHandler(sessionBean.getAuthObject(), this);
+        this.viewRightsHandler = new ViewRightsHandler(null, this);
     }
 
     public static void main(String args[]) throws LogicException, PersistenceException {
@@ -87,7 +79,7 @@ public class ApplicationController implements Serializable {
 
     private void startMainForm() throws LogicException, PersistenceException {
         init();
-        String username = sessionBean.getAuthObject().toString();
+        String username = "TEST-USER";
         mainForm = new MainForm(this);
         mainForm.setLblUser(username);
         mainForm.getLblPrivileges().setVisible(false);
@@ -102,7 +94,6 @@ public class ApplicationController implements Serializable {
         mainForm.setAutoRequestFocus(true);
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             @Override
             public void run() {
                 mainForm.toFront();
@@ -110,83 +101,81 @@ public class ApplicationController implements Serializable {
             }
         });
 
-        memberMessageBean.start();
-
-        Timer timer1 = new Timer();
-        timer1.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                try {
-                    List<MemberMessage> ls = memberMessageBean.updateMessages();
-                    for (MemberMessage m : ls) {
-                        onMessage(m);
-                    }
-                } catch (JMSException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (LogicException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (PersistenceException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            public void onMessage(MemberMessage imm) {
-                if (!imm.getType().equals(MessageType.REMOVED)) {
-                    panelMessages.addMemberMsg(imm);
-                    if (!mainForm.getTabPanelMainCenter().getSelectedComponent().equals(panelMessages)) {
-                        incrementMessageCount();
-                    }
-                }
-                if (imm.getType().equals(MessageType.NEW)) {
-                    try {
-                        searchBean.start();
-                        panelMessages.showMembersToAssign(searchBean.getMemberByUID(imm.getMember()));
-                        searchBean.commit();
-                        javax.swing.JOptionPane.showMessageDialog(mainForm, "Sie haben eine neue Nachricht.");
-                    } catch (PersistenceException ex) {
-                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (DomainException ex) {
-                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (LogicException ex) {
-                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            }
-        }, 60000);
-
-        subTeamMessageBean.start();
-
-        Timer timer2 = new Timer();
-        timer2.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                try {
-                    List<SubTeamMessage> ls = subTeamMessageBean.updateMessages();
-                    for (SubTeamMessage m : ls) {
-                        onMessage(m);
-                    }
-                } catch (JMSException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (LogicException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (PersistenceException ex) {
-                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            public void onMessage(SubTeamMessage istm) {
-                if (!istm.getType().equals(MessageType.REMOVED)) {
-                    javax.swing.JOptionPane.showMessageDialog(mainForm, "Sie haben eine neue Nachricht.");
-                    panelMessages.addSubTeamMessage(istm);
-                    if (!mainForm.getTabPanelMainCenter().getSelectedComponent().equals(panelMessages)) {
-                        incrementMessageCount();
-                    }
-                }
-            }
-        }, 60000);
+//        memberMessageBean.start();
+//
+//        Timer timer1 = new Timer();
+//        timer1.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    List<MemberMessage> ls = memberMessageBean.updateMessages();
+//                    for (MemberMessage m : ls) {
+//                        onMessage(m);
+//                    }
+//                } catch (JMSException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (LogicException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (PersistenceException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//            public void onMessage(MemberMessage imm) {
+//                if (!imm.getType().equals(MessageType.REMOVED)) {
+//                    panelMessages.addMemberMsg(imm);
+//                    if (!mainForm.getTabPanelMainCenter().getSelectedComponent().equals(panelMessages)) {
+//                        incrementMessageCount();
+//                    }
+//                }
+//                if (imm.getType().equals(MessageType.NEW)) {
+//                    try {
+//                        searchBean.start();
+//                        panelMessages.showMembersToAssign(searchBean.getMemberByUID(imm.getMember()));
+//                        searchBean.commit();
+//                        javax.swing.JOptionPane.showMessageDialog(mainForm, "Sie haben eine neue Nachricht.");
+//                    } catch (PersistenceException ex) {
+//                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                    } catch (DomainException ex) {
+//                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                    } catch (LogicException ex) {
+//                        Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//
+//                }
+//            }
+//        }, 60000);
+//
+//        subTeamMessageBean.start();
+//
+//        Timer timer2 = new Timer();
+//        timer2.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    List<SubTeamMessage> ls = subTeamMessageBean.updateMessages();
+//                    for (SubTeamMessage m : ls) {
+//                        onMessage(m);
+//                    }
+//                } catch (JMSException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (LogicException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (PersistenceException ex) {
+//                    Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//            public void onMessage(SubTeamMessage istm) {
+//                if (!istm.getType().equals(MessageType.REMOVED)) {
+//                    javax.swing.JOptionPane.showMessageDialog(mainForm, "Sie haben eine neue Nachricht.");
+//                    panelMessages.addSubTeamMessage(istm);
+//                    if (!mainForm.getTabPanelMainCenter().getSelectedComponent().equals(panelMessages)) {
+//                        incrementMessageCount();
+//                    }
+//                }
+//            }
+//        }, 60000);
     }
 
     public void loadPrivileges() {

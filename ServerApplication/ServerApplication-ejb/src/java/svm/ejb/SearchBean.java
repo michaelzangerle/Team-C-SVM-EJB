@@ -19,6 +19,7 @@ import svm.ejb.exceptions.DomainException;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
 import svm.persistence.abstraction.exceptions.NoSessionFoundException;
+import svm.persistence.hibernate.HibernateUtil;
 
 /**
  *
@@ -27,24 +28,23 @@ import svm.persistence.abstraction.exceptions.NoSessionFoundException;
 @Stateful
 @DeclareRoles({"isAllowedForSearching"})
 @RolesAllowed({"isAllowedForSearching"})
-public class SearchBean extends ControllerBean implements SearchBeanRemote {
+public class SearchBean implements SearchBeanRemote {
 
     private Integer sessionId;
 
     public SearchBean() {
     }
 
-    @Override
-    @PermitAll
-    public void start() throws PersistenceException, DomainException, LogicException {
-        super.start();
-        this.sessionId = DomainFacade.generateSessionId();
+    public void check() throws PersistenceException {
+        if (!HibernateUtil.hasSession(sessionId)) {
+            throw new PersistenceException("No Session Found");
+        }
     }
 
     @Override
     @PermitAll
-    public void restart() throws PersistenceException, DomainException, LogicException {
-        start();
+    public void start() throws PersistenceException, DomainException, LogicException {
+        this.sessionId = DomainFacade.generateSessionId();
     }
 
     @Override
@@ -56,7 +56,6 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.sessionId = null;
-        super.abort();
     }
 
     @Override
@@ -68,7 +67,6 @@ public class SearchBean extends ControllerBean implements SearchBeanRemote {
             Logger.getLogger(ControllerDBSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.sessionId = null;
-        super.commit();
     }
 
     @Override

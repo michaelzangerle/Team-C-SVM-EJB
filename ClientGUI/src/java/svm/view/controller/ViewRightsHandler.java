@@ -4,10 +4,25 @@
  */
 package svm.view.controller;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import svm.domain.abstraction.exception.DomainAttributeException;
+import svm.domain.abstraction.exception.DomainParameterCheckException;
+import svm.domain.abstraction.modelInterfaces.IContactDetails;
+import svm.domain.abstraction.modelInterfaces.IContestHasTeam;
+import svm.domain.abstraction.modelInterfaces.IDepartment;
+import svm.domain.abstraction.modelInterfaces.IDepartmentsHasMembers;
+import svm.domain.abstraction.modelInterfaces.IMember;
+import svm.domain.abstraction.modelInterfaces.ISport;
+import svm.domain.abstraction.modelInterfaces.ISubTeamsHasMembers;
+import svm.domain.abstraction.modelInterfaces.IUserPrivilege;
+import svm.domain.abstraction.modelInterfaces.IUserPrivilege.Privileges;
 import svm.ejb.dto.AuthDTO;
+import svm.persistence.abstraction.exceptions.NoSessionFoundException;
+import svm.persistence.abstraction.exceptions.NotSupportedException;
 import svm.view.forms.MainForm;
 import svm.view.forms.PanelContests;
 import svm.view.forms.PanelMembers;
@@ -19,6 +34,257 @@ import svm.view.forms.PanelMessages;
  */
 public class ViewRightsHandler {
 
+    public static class AuthDummyDTO extends AuthDTO {
+
+        public AuthDummyDTO() {
+            super(new IMember() {
+                @Override
+                public String getTitle() {
+                    return "DUMMY";
+                }
+
+                @Override
+                public void setTitle(String string) {
+                }
+
+                @Override
+                public String getFirstName() {
+                    return "Dummy";
+                }
+
+                @Override
+                public void setFirstName(String string) throws DomainAttributeException {
+                }
+
+                @Override
+                public String getLastName() {
+                    return "Dummy";
+                }
+
+                @Override
+                public void setLastName(String string) throws DomainAttributeException {
+                }
+
+                @Override
+                public String getSocialNumber() {
+                    return "Dummy";
+                }
+
+                @Override
+                public void setSocialNumber(String string) throws DomainAttributeException {
+                }
+
+                @Override
+                public Date getBirthDate() {
+                    return new Date();
+                }
+
+                @Override
+                public void setBirthDate(Date date) throws DomainParameterCheckException {
+                }
+
+                @Override
+                public String getGender() {
+                    return "M";
+                }
+
+                @Override
+                public void setGender(String string) throws DomainAttributeException, DomainParameterCheckException {
+                }
+
+                @Override
+                public Date getEntryDate() {
+                    return new Date();
+                }
+
+                @Override
+                public void setEntryDate(Date date) throws DomainParameterCheckException {
+                }
+
+                @Override
+                public String getAvatar() {
+                    return "DUMMY";
+                }
+
+                @Override
+                public void setAvatar(String string) {
+                }
+
+                @Override
+                public String getUrl() {
+                    return "DUMMY";
+                }
+
+                @Override
+                public void setUrl(String string) {
+                }
+
+                @Override
+                public String getUserName() {
+                    return "DUMMY";
+                }
+
+                @Override
+                public void setUserName(String string) throws DomainAttributeException {
+                }
+
+                @Override
+                public IContactDetails getContactDetails() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public void setContactDetails(IContactDetails icd) throws DomainAttributeException {
+                }
+
+                @Override
+                public Double getFee() {
+                    return 5.0;
+                }
+
+                @Override
+                public boolean hasPaidFee(Integer intgr) throws DomainParameterCheckException {
+                    return true;
+                }
+
+                @Override
+                public List<IContestHasTeam> getContestsHasTeamsForPerson() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public List<IDepartmentsHasMembers> getDepartmentsHasMembers() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public Boolean isIn(IDepartment id) {
+                    return true;
+                }
+
+                @Override
+                public Integer getAge() {
+                    return 18;
+                }
+
+                @Override
+                public List<ISubTeamsHasMembers> getSubTeamsHasMembersForPerson() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public void setPaidCurrentYear() throws NoSessionFoundException, IllegalAccessException, InstantiationException, NotSupportedException {
+                }
+
+                @Override
+                public Boolean isIn(Privileges prvlgs) {
+                    return true;
+                }
+
+                @Override
+                public void removePrivilege(IUserPrivilege iup) throws DomainParameterCheckException, DomainAttributeException {
+                }
+
+                @Override
+                public void addPrivilege(IUserPrivilege iup) throws DomainParameterCheckException, DomainAttributeException, NoSessionFoundException, IllegalAccessException, InstantiationException {
+                }
+
+                @Override
+                public List<IUserPrivilege> getPrivileges() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public void setSport(ISport isport) {
+                }
+
+                @Override
+                public ISport getSport() {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+
+                @Override
+                public boolean isNull() {
+                    return false;
+                }
+
+                @Override
+                public Integer getUID() {
+                    return 1;
+                }
+            });
+        }
+
+        @Override
+        public boolean isAllowedForSearching() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForMemberViewing() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForMemberChanging() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForMemberDeleting() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForMemberAdding() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForMemberAddingPrivileges() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestViewing() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestDetailsChanging() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestDeleting() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestAdding() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestResultChanging() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestMatchAdding() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestTeamsChanging() {
+            return true;
+        }
+
+        @Override
+        public boolean isAllowedForContestSubTeamChanging() {
+            return true;
+        }
+    }
     private final AuthDTO user;
     private final ApplicationController appController;
     private MainForm mainForm;
@@ -31,7 +297,11 @@ public class ViewRightsHandler {
 
     public ViewRightsHandler(AuthDTO user, ApplicationController appController) {
         this.appController = appController;
-        this.user = user;
+        if (user == null) {
+            this.user = new AuthDummyDTO();
+        } else {
+            this.user = user;
+        }
         this.contestSubPanelsByName = new HashMap<String, JPanel>();
         this.mainPanelsByName = new HashMap<String, JPanel>();
     }

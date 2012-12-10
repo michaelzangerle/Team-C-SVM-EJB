@@ -4,16 +4,13 @@
  */
 package svm.view.controller;
 
-import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JPanel;
-import javax.swing.ListModel;
+import javax.swing.JOptionPane;
 import svm.ejb.MemberBeanRemote;
 import svm.ejb.SearchBeanRemote;
 import svm.ejb.dto.DepartmentDTO;
@@ -64,6 +61,8 @@ public class ViewMemberController {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
 
     }
@@ -81,6 +80,8 @@ public class ViewMemberController {
                     Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (PersistenceException ex) {
                     Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (javax.ejb.EJBAccessException ex) {
+                    JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
                 }
             }
             this.memberController.start(member);
@@ -121,6 +122,8 @@ public class ViewMemberController {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -135,6 +138,8 @@ public class ViewMemberController {
                         this.memberController.setSport(sp);
                     } catch (PersistenceException ex) {
                         Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (javax.ejb.EJBAccessException ex) {
+                        JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
                     }
                 }
             }
@@ -162,6 +167,8 @@ public class ViewMemberController {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DomainException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -176,6 +183,8 @@ public class ViewMemberController {
                     Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (PersistenceException ex) {
                     Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (javax.ejb.EJBAccessException ex) {
+                    JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
                 }
             }
 
@@ -187,6 +196,8 @@ public class ViewMemberController {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -213,6 +224,8 @@ public class ViewMemberController {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -278,6 +291,8 @@ public class ViewMemberController {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (DomainException ex) {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         }
     }
@@ -304,6 +319,8 @@ public class ViewMemberController {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (DomainException ex) {
                 Logger.getLogger(ViewMemberController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         }
     }

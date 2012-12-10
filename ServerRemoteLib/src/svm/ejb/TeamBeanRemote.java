@@ -23,5 +23,5 @@ public interface TeamBeanRemote extends SvmBean {
 
     List<ContestDTO> getContests();
 
-    void start(TeamDTO team) throws PersistenceException, DomainException, LogicException;
+    void start(TeamDTO team) throws javax.ejb.EJBAccessException, PersistenceException, DomainException, LogicException;
 }

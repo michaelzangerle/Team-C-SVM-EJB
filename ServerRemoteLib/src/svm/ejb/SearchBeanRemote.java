@@ -17,7 +17,13 @@ import svm.ejb.exceptions.PersistenceException;
  * @author mike
  */
 @Remote
-public interface SearchBeanRemote extends SvmBean {
+public interface SearchBeanRemote {
+
+    void start() throws PersistenceException, DomainException, LogicException;
+
+    void abort() throws PersistenceException, LogicException;
+
+    void commit() throws LogicException, PersistenceException;
 
     List<MemberDTO> getMembers(String firstName, String lastName, DepartmentDTO department) throws LogicException, PersistenceException;
 

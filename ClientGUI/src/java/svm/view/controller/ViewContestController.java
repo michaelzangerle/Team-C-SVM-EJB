@@ -18,6 +18,7 @@ import javax.naming.NamingException;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import svm.ejb.ContestBeanRemote;
 import svm.ejb.SearchBeanRemote;
@@ -120,6 +121,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenceException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         }
     }
@@ -162,6 +165,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (LogicException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         }
     }
@@ -200,6 +205,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenceException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -218,6 +225,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenceException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
 
         try {
@@ -231,6 +240,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -256,6 +267,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -308,6 +321,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -340,6 +355,8 @@ public class ViewContestController {
                 javax.swing.JOptionPane.showMessageDialog(this.panelContests, "Error while parsing Date, corrupted cell: " + entriesIterator + ",0\nCorrect Format is dd.MM.yyyy - hh.mm");
                 dates.clear();
                 break;
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
 
             try {
@@ -357,6 +374,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (LogicException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
             entriesIterator++;
         }
@@ -369,6 +388,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenceException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -392,6 +413,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (LogicException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         }
     }
@@ -414,6 +437,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (DomainException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         } else {
             javax.swing.JOptionPane.showMessageDialog(this.panelContests, "Bitte eine Auswahl treffen");
@@ -435,6 +460,8 @@ public class ViewContestController {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (DomainException ex) {
                 Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
             }
         } else {
             javax.swing.JOptionPane.showMessageDialog(this.panelContests, "Bitte eine Auswahl treffen");
@@ -463,6 +490,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
 
     }
@@ -540,6 +569,8 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (javax.ejb.EJBAccessException ex) {
+            JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
         }
     }
 
@@ -573,7 +604,9 @@ public class ViewContestController {
                     Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (LogicException ex) {
                     Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
             }
             this.contestController.commit();
             this.contestController.restart();
@@ -583,7 +616,9 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
     }
 
     /**
@@ -603,7 +638,9 @@ public class ViewContestController {
                     Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (DomainException ex) {
                     Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
             }
             this.contestController.commit();
             this.contestController.restart();
@@ -616,7 +653,9 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenceException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
     }
 
     /**
@@ -659,7 +698,9 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
     }
 
     /**
@@ -676,7 +717,9 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenceException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
     }
 
     /**
@@ -797,7 +840,9 @@ public class ViewContestController {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LogicException ex) {
             Logger.getLogger(ViewContestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (javax.ejb.EJBAccessException ex) {
+                JOptionPane.showMessageDialog(null, ApplicationController.notAuthMessage);
+            }
     }
 
     private Integer getIndexByObject(AbstractListModel<SportDTO> listModel, SportDTO sport) {

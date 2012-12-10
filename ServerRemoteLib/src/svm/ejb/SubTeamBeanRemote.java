@@ -19,20 +19,19 @@ import svm.ejb.exceptions.PersistenceException;
  * @author mike
  */
 @Remote
-public interface SubTeamBeanRemote extends SvmBean{
-    
-      SubTeamDTO getSubTeam() throws LogicException;
+public interface SubTeamBeanRemote extends SvmBean {
 
-    void setName(String name) throws LogicException;
+    SubTeamDTO getSubTeam() throws javax.ejb.EJBAccessException, LogicException;
 
-    void addMember(MemberDTO member) throws LogicException, PersistenceException, DomainException;
+    void setName(String name) throws javax.ejb.EJBAccessException, LogicException;
 
-    void removeMember(MemberDTO member) throws LogicException, DomainException;
+    void addMember(MemberDTO member) throws javax.ejb.EJBAccessException, LogicException, PersistenceException, DomainException;
 
-    List<MemberDTO> getMembersOfSubTeam() throws LogicException,PersistenceException;
+    void removeMember(MemberDTO member) throws javax.ejb.EJBAccessException, LogicException, DomainException;
 
-    List<MemberDTO> getMemberOfTeam() throws LogicException,PersistenceException;
-    
-    public void start(TeamDTO team, ContestDTO contest) throws PersistenceException, DomainException, LogicException;
-    
+    List<MemberDTO> getMembersOfSubTeam() throws javax.ejb.EJBAccessException, LogicException, PersistenceException;
+
+    List<MemberDTO> getMemberOfTeam() throws javax.ejb.EJBAccessException, LogicException, PersistenceException;
+
+    public void start(TeamDTO team, ContestDTO contest) throws javax.ejb.EJBAccessException, PersistenceException, DomainException, LogicException;
 }
