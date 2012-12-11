@@ -5,7 +5,12 @@
 package svm.view.controller;
 
 import java.io.Serializable;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import svm.ejb.*;
 import svm.ejb.exceptions.LogicException;
 import svm.ejb.exceptions.PersistenceException;
@@ -73,8 +78,23 @@ public class ApplicationController implements Serializable {
     }
 
     public static void main(String args[]) throws LogicException, PersistenceException {
-        // Start the application
-        new ApplicationController().startMainForm();
+        try {
+            
+             Properties props = new Properties();
+             props.put("logoString", "SVM");
+             com.jtattoo.plaf.acryl.AcrylLookAndFeel.setCurrentTheme(props);
+             UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");             
+             new ApplicationController().startMainForm();
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void startMainForm() throws LogicException, PersistenceException {
