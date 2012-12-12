@@ -271,4 +271,24 @@ public class SearchBean implements SearchBeanRemote {
             throw new PersistenceException(ex);
         }
     }
+
+    @Override
+    @PermitAll
+    public boolean login(String userName, String password) {
+        try {
+            List<IMember> members = DomainFacade.getMemberModelDAO().get(sessionId, userName);
+            System.out.println("Login: " + userName + " " + members.size());
+            if (members.size() == 1) {
+                if (password.equals("a")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        } catch (NoSessionFoundException ex) {
+            Logger.getLogger(SearchBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

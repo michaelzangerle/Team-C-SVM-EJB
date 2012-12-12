@@ -48,4 +48,6 @@ public interface SearchBeanRemote {
     MemberDTO getMemberByUID(int uid) throws LogicException, PersistenceException;
 
     SubTeamDTO getSubTeam(int uid) throws LogicException, PersistenceException;
+
+    boolean login(String userName, String password);
 }
