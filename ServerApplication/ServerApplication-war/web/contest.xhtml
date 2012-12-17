@@ -4,11 +4,17 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Contests - Sportvereinmanager - Team C</title>
+        <link href="svm.css" type="text/css" rel="stylesheet" /> 
     </h:head>
     <h:body>
-        <h1>#{contestBean.contest.name}</h1>
-        <table width="50%">
+        <div id="page">
+        <a href="index.xhtml">
+        <img src="header.jpg" alt="Sportvereinmanager Team C 2012" height="140px" width="995px" />
+        </a>
+            <div id="main">
+            <h1>#{contestBean.contest.name}</h1>
+        <table width="98%">
             <tr>
                 <th width="25%">Heim</th>
                 <th width="25%">Auswärts</th>
@@ -23,12 +29,16 @@
                         <td>#{match.start}</td>
                         <td>#{match.resultHome}:#{match.resultAway}</td>
                         <td>
-                            <h:commandButton action="#{matchBean.setMatch(match)}" value="Resulat ändern" /> 
+                            <h:commandButton action="#{matchBean.setMatch(match)}" value="Resultat ändern" /> 
                         </td>
                     </tr>
                 </ui:repeat>
             </h:form>
         </table>
+            </div>
+                      <div id="footer">&copy; 2012 Team C Enterprise Applications - Gaida Jost Wachter Zangerle</div>
+
+    </div>
     </h:body>
 </html>
 

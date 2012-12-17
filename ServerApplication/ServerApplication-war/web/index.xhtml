@@ -4,9 +4,14 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>Wettbewerb Übersicht</title>
+        <title>Wettbewerb Übersicht - Sportvereinmanager - Team C</title>
+        <link href="svm.css" type="text/css" rel="stylesheet" /> 
     </h:head>
     <h:body>
+        <div id="page">
+        <a href="index.xhtml">
+        <img src="header.jpg" alt="Sportvereinmanager Team C 2012" height="140px" width="995px" />
+        </a>
         <ul>
             <h:form>
                 <ui:repeat value="#{searchBean.contests}" var="contest">
@@ -16,6 +21,8 @@
                 </ui:repeat>
             </h:form>
         </ul>
+        <div id="footer">&copy; 2012 Team C Enterprise Applications - Gaida Jost Wachter Zangerle</div>
+        </div>
     </h:body>
 </html>
 

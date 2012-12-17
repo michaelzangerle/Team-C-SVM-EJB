@@ -4,24 +4,33 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Match - Sportvereinmanager - Team C</title>
+        <link href="svm.css" type="text/css" rel="stylesheet" /> 
     </h:head>
     <h:body>
-        <c:if test="#{loginBean.loggedIn == false}">
-            <h:form>
-                Benutzername: <h:inputText value="#{loginBean.userName}"></h:inputText><br />
-                Passwort: <h:inputSecret value="#{loginBean.password}"></h:inputSecret><br />
-                <h:commandButton action="#{loginBean.login()}" value="Login" />
-            </h:form>
-        </c:if>
-        <c:if test="#{loginBean.loggedIn}">
-            <h1>#{matchBean.match.home.name} : #{matchBean.match.away.name}</h1>
-            <h:form>
-                <h:inputText value="#{matchBean.home}" /> : <h:inputText value="#{matchBean.away}" /><br/>
-                <h:commandButton action="#{contestBean.save(matchBean.match, matchBean.home, matchBean.away)}" value="Speichern" />
-                <h:commandLink action="contest">Zurück</h:commandLink>
-            </h:form>
-        </c:if>
+        <div id="page">
+            <a href="index.xhtml">
+                <img src="header.jpg" alt="Sportvereinmanager Team C 2012" height="140px" width="995px" />
+            </a>
+            <div id="main">
+                <c:if test="#{loginBean.loggedIn == false}">
+                    <h:form>
+                        <span id="login">Benutzername:</span> <h:inputText value="#{loginBean.userName}"></h:inputText><br />
+                        <span id="login">Passwort: </span><h:inputSecret value="#{loginBean.password}"></h:inputSecret><br />
+                        <h:commandButton action="#{loginBean.login()}" value="Login" />
+                    </h:form>
+                </c:if>
+                <c:if test="#{loginBean.loggedIn}">
+                    <h1>#{matchBean.match.home.name} : #{matchBean.match.away.name}</h1>
+                    <h:form>
+                        <h:inputText value="#{matchBean.home}" /> : <h:inputText value="#{matchBean.away}" /><br/>
+                        <h:commandButton action="#{contestBean.save(matchBean.match, matchBean.home, matchBean.away)}" value="speichern" />
+                        <h:commandLink action="contest">zurück</h:commandLink>
+                    </h:form>
+                </c:if>
+            </div>
+                      <div id="footer">&copy; 2012 Team C Enterprise Applications - Gaida Jost Wachter Zangerle</div>
+        </div>
     </h:body>
 </html>
 
